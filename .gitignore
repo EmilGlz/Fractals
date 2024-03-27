@@ -1,0 +1,8 @@
+
+/Library
+*.cache
+*.backup
+/Temp
+/.vs
+*.dwlt
+*.log
