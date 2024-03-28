@@ -25,13 +25,16 @@ namespace Scripts.D3.Sierpinski
         private readonly Vector3[] _pivotPositions;
         private readonly PyramidProperties _properties;
         private readonly int _currentIterator;
+        private readonly bool _isTop;
         private readonly Vector3 _baseCenter;
         private GameObject Figure;
-        public Pyramid(Vector3[] pivotPositions, PyramidProperties properties, int currentIterator)
+        public Pyramid(Vector3[] pivotPositions, PyramidProperties properties, int currentIterator, bool isTop = false)
         {
             _pivotPositions = pivotPositions;
             _properties = properties;
             _currentIterator = currentIterator;
+            _isTop = isTop;
+
             _baseCenter = GetMiddle(_pivotPositions[0], _pivotPositions[1], _pivotPositions[2]);
             if (currentIterator < properties.IteratorLimit)
                 Main.Instance.StartCoroutine(GenerateChildren());
@@ -43,10 +46,25 @@ namespace Scripts.D3.Sierpinski
             var children = GenerateInsideTriangles();
             foreach (var child in children)
             {
-                var obj = SpawnObject(child._pivotPositions[0], child._baseCenter);
+                var obj = SpawnObject(child._pivotPositions[0], child._baseCenter, _isTop);
                 child.Figure = obj;
             }
             Object.Destroy(Figure);
+        }
+
+        IEnumerator DecreaseScaleAsync(Transform transform, Vector3 targetScale, float duration)
+        {
+            Vector3 initialScale = transform.localScale;
+            float timer = 0f;
+            while (timer < duration)
+            {
+                float progress = timer / duration;
+                Vector3 currentScale = Vector3.Lerp(initialScale, targetScale, progress);
+                transform.localScale = currentScale;
+                yield return null;
+                timer += Time.deltaTime;
+            }
+            transform.localScale = targetScale;
         }
 
         private List<Pyramid> GenerateInsideTriangles()
@@ -92,18 +110,26 @@ namespace Scripts.D3.Sierpinski
                     vertices["CD"],
                     vertices["BD"],
                     vertices["D"],
-                },_properties,nextIterator),
+                }, _properties, nextIterator, true),
             };
             return newPyramids;
         }
 
-        private GameObject SpawnObject(Vector3 pivotPos, Vector3 parentBaseCenter)
+        private GameObject SpawnObject(Vector3 pivotPos, Vector3 parentBaseCenter, bool fromTop)
         {
             var res = Object.Instantiate(_properties.PyramidPrefab, _properties.Parent);
-            res.transform.localScale = Vector3.one * (Figure != null ? Figure.transform.localScale.x / 2f : .5f);
+            var targetScale = Vector3.one * (Figure != null ? Figure.transform.localScale.x / 2f : .5f);
+            var startingScale = Vector3.one * (Figure != null ? Figure.transform.localScale.x : .5f);
             res.transform.SetParent(_properties.Parent);
             res.transform.position = pivotPos;
             LookAt(res.transform, parentBaseCenter);
+            if (fromTop)
+                res.transform.localScale = targetScale;
+            else
+            {
+                res.transform.localScale = startingScale;
+                Main.Instance.StartCoroutine(DecreaseScaleAsync(res.transform, targetScale, _properties.Delay * 0.8f));
+            }
             return res;
         }
 
