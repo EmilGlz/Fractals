@@ -22,7 +22,7 @@ public class Sierpinski : MonoBehaviour
         {
             yield return null;
             var anglePos = _angles[Random.Range(0, 3)];
-            _currentPos = (_currentPos + GetPosition(anglePos)) / 2f;
+            _currentPos = (_currentPos + anglePos.GetPosition()) / 2f;
             SpawnDot(_currentPos);
         }
     }
