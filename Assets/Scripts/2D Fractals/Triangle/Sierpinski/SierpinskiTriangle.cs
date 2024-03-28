@@ -5,15 +5,14 @@ using UnityEngine;
 public class SierpinskiTriangle : MonoBehaviour
 {
     [SerializeField] private Transform[] _angles;
-    [SerializeField] private int _iterateLimit = 3;
-    [SerializeField] private SierpinskiLineSettings _lineSettings;
+    [SerializeField] private TriangleSettings _triangleSettings;
     private void Start()
     {
-        var baseTriangle = new Triangle(new Vector2[] {
+        new Triangle(new Vector2[] {
                 _angles[0].GetPosition(),
                 _angles[1].GetPosition(),
                 _angles[2].GetPosition(),
-            }, 0, _iterateLimit, _lineSettings);
+            }, 0, _triangleSettings);
     }
 
 }
@@ -21,16 +20,14 @@ public class Triangle
 {
     private readonly Vector2[] _angles;
     private readonly int _iterateCount;
-    private readonly int _iterateLimit;
-    private readonly SierpinskiLineSettings _lineSettings;
+    private readonly TriangleSettings _triangleSettings;
 
-    public Triangle(Vector2[] angles, int iterateCount, int iterateLimit, SierpinskiLineSettings lineSettings)
+    public Triangle(Vector2[] angles, int iterateCount, TriangleSettings triangleSettings)
     {
         _angles = angles;
         _iterateCount = iterateCount;
-        _iterateLimit = iterateLimit;
-        _lineSettings = lineSettings;
-        if (_iterateCount < iterateLimit)
+        _triangleSettings = triangleSettings;
+        if (_iterateCount < _triangleSettings.IterateLimit)
             Main.Instance.StartCoroutine(GenerateChildren());
     }
 
@@ -44,13 +41,13 @@ public class Triangle
     public void DrawDriangleInside()
     {
         var lineRendererObj = new GameObject("LineRenderer", typeof(LineRenderer));
-        lineRendererObj.transform.SetParent(_lineSettings.Parent);
+        lineRendererObj.transform.SetParent(_triangleSettings.LineSettings.Parent);
         var lineRenderer = lineRendererObj.GetComponent<LineRenderer>();
-        lineRenderer.startWidth = _lineSettings.Width;
-        lineRenderer.endWidth = _lineSettings.Width;
-        lineRenderer.startColor = _lineSettings.Color;
-        lineRenderer.endColor = _lineSettings.Color;
-        lineRenderer.material = _lineSettings.Material;
+        lineRenderer.startWidth = _triangleSettings.LineSettings.Width;
+        lineRenderer.endWidth = _triangleSettings.LineSettings.Width;
+        lineRenderer.startColor = _triangleSettings.LineSettings.Color;
+        lineRenderer.endColor = _triangleSettings.LineSettings.Color;
+        lineRenderer.material = _triangleSettings.LineSettings.Material;
         lineRenderer.positionCount = 4;
         lineRenderer.SetPosition(0, _angles[0]);
         lineRenderer.SetPosition(1, _angles[1]);
@@ -75,17 +72,17 @@ public class Triangle
                 vertices["A"],
                 vertices["AB"],
                 vertices["AC"],
-            }, _iterateCount + 1, _iterateLimit, _lineSettings),
+            }, _iterateCount + 1, _triangleSettings),
             new Triangle(new Vector2[]{
                 vertices["B"],
                 vertices["AB"],
                 vertices["BC"],
-            }, _iterateCount + 1, _iterateLimit, _lineSettings),
+            }, _iterateCount + 1, _triangleSettings),
             new Triangle(new Vector2[]{
                 vertices["C"],
                 vertices["AC"],
                 vertices["BC"],
-            }, _iterateCount + 1, _iterateLimit, _lineSettings),
+            }, _iterateCount + 1, _triangleSettings),
         };
         return triangles;
     }

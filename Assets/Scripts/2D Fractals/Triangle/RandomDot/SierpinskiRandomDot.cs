@@ -1,7 +1,7 @@
 using System.Collections;
 using UnityEngine;
 
-public class Sierpinski : MonoBehaviour
+public class SierpinskiRandomDot : MonoBehaviour
 {
     [SerializeField] private GameObject _dotPrefab;
     [SerializeField] private Transform[] _angles;
