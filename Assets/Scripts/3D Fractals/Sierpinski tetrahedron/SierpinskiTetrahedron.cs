@@ -1,6 +1,5 @@
 using System.Collections;
 using System.Collections.Generic;
-using System.Linq;
 using UnityEngine;
 
 namespace Scripts.D3.Sierpinski
@@ -35,7 +34,7 @@ namespace Scripts.D3.Sierpinski
             _currentIterator = currentIterator;
             _isTop = isTop;
 
-            _baseCenter = GetMiddle(_pivotPositions[0], _pivotPositions[1], _pivotPositions[2]);
+            _baseCenter = Utils.GetMiddle(_pivotPositions[0], _pivotPositions[1], _pivotPositions[2]);
             if (currentIterator < properties.IteratorLimit)
                 Main.Instance.StartCoroutine(GenerateChildren());
         }
@@ -74,12 +73,12 @@ namespace Scripts.D3.Sierpinski
                 { "B", _pivotPositions[1] },
                 { "C", _pivotPositions[2] },
                 { "D", _pivotPositions[3] },
-                { "AB", GetMiddle(_pivotPositions[0], _pivotPositions[1]) },
-                { "BC", GetMiddle(_pivotPositions[1], _pivotPositions[2]) },
-                { "AC", GetMiddle(_pivotPositions[0], _pivotPositions[2]) },
-                { "AD", GetMiddle(_pivotPositions[0], _pivotPositions[3]) },
-                { "BD", GetMiddle(_pivotPositions[1], _pivotPositions[3]) },
-                { "CD", GetMiddle(_pivotPositions[2], _pivotPositions[3]) },
+                { "AB", Utils.GetMiddle(_pivotPositions[0], _pivotPositions[1]) },
+                { "BC", Utils.GetMiddle(_pivotPositions[1], _pivotPositions[2]) },
+                { "AC", Utils.GetMiddle(_pivotPositions[0], _pivotPositions[2]) },
+                { "AD", Utils.GetMiddle(_pivotPositions[0], _pivotPositions[3]) },
+                { "BD", Utils.GetMiddle(_pivotPositions[1], _pivotPositions[3]) },
+                { "CD", Utils.GetMiddle(_pivotPositions[2], _pivotPositions[3]) },
             };
             var nextIterator = _currentIterator + 1;
             var newPyramids = new List<Pyramid>() {
@@ -141,16 +140,6 @@ namespace Scripts.D3.Sierpinski
             Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
 
             transform.rotation = Quaternion.Euler(0f, targetRotation.eulerAngles.y, 0f);
-        }
-
-        private static Vector3 GetMiddle(Vector3 pos1, Vector3 pos2)
-        {
-            return (pos1 + pos2) / 2f;
-        }
-
-        private static Vector3 GetMiddle(Vector3 pos1, Vector3 pos2, Vector3 pos3)
-        {
-            return (pos1 + pos2 + pos3) / 3f;
         }
     }
 }
