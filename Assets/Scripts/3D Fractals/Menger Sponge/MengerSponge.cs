@@ -51,7 +51,7 @@ namespace Scripts.D3.Menger
         {
             var res = Object.Instantiate(_properties.Prefab, _properties.Parent);
             res.name = name;
-            res.transform.position = pivotPos;
+            res.transform.localPosition = pivotPos;
             var targetScale = Vector3.one * (Figure != null ? Figure.transform.localScale.x / 3f : 1 / 3f);
             var startingScale = Vector3.one * (Figure != null ? Figure.transform.localScale.x : 1 / 3f);
             if (CanHaveAnimation(name))

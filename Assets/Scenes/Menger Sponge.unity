@@ -224,7 +224,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!64 &121125366
 MeshCollider:
   m_ObjectHideFlags: 0
@@ -322,6 +322,7 @@ GameObject:
   m_Component:
   - component: {fileID: 138145297}
   - component: {fileID: 138145298}
+  - component: {fileID: 138145299}
   m_Layer: 0
   m_Name: Menger
   m_TagString: Untagged
@@ -368,8 +369,21 @@ MonoBehaviour:
   _properties:
     Prefab: {fileID: 2366322338077665556, guid: b917cb7a82cbce643b84dbe2940644f2, type: 3}
     Parent: {fileID: 138145297}
-    IteratorLimit: 3
+    IteratorLimit: 4
     Delay: 3
+--- !u!114 &138145299
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 138145296}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 61502a8a53cfea94e93c1c6e61f7ff70, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  rotationSpeed: 20
 --- !u!1 &486930244
 GameObject:
   m_ObjectHideFlags: 0
@@ -611,7 +625,7 @@ Camera:
   m_Enabled: 1
   serializedVersion: 2
   m_ClearFlags: 1
-  m_BackGroundColor: {r: 0.19215687, g: 0.3019608, b: 0.4745098, a: 0}
+  m_BackGroundColor: {r: 0.25157225, g: 0.25157225, b: 0.25157225, a: 0}
   m_projectionMatrixMode: 1
   m_GateFitMode: 2
   m_FOVAxisMode: 0
