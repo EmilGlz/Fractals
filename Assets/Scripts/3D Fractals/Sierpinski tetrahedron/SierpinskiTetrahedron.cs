@@ -46,21 +46,6 @@ namespace Scripts.D3.Sierpinski
             Object.Destroy(Figure);
         }
 
-        IEnumerator DecreaseScaleAsync(Transform transform, Vector3 targetScale, float duration)
-        {
-            Vector3 initialScale = transform.localScale;
-            float timer = 0f;
-            while (timer < duration)
-            {
-                float progress = timer / duration;
-                Vector3 currentScale = Vector3.Lerp(initialScale, targetScale, progress);
-                transform.localScale = currentScale;
-                yield return null;
-                timer += Time.deltaTime;
-            }
-            transform.localScale = targetScale;
-        }
-
         private List<Pyramid> GenerateInsideTriangles()
         {
             var vertices = new Dictionary<string, Vector3>() {
@@ -122,7 +107,7 @@ namespace Scripts.D3.Sierpinski
             else
             {
                 res.transform.localScale = startingScale;
-                Main.Instance.StartCoroutine(DecreaseScaleAsync(res.transform, targetScale, _properties.Delay * 0.8f));
+                Main.Instance.StartCoroutine(Utils.DecreaseScaleAsync(res.transform, targetScale, _properties.Delay * 0.8f));
             }
             return res;
         }

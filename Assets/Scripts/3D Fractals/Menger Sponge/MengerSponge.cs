@@ -52,8 +52,15 @@ namespace Scripts.D3.Menger
             var res = Object.Instantiate(_properties.Prefab, _properties.Parent);
             res.name = name;
             res.transform.position = pivotPos;
-            var targetScale = Vector3.one * (Figure != null ? Figure.transform.localScale.x / 3f : 1/3f);
-            res.transform.localScale = targetScale;
+            var targetScale = Vector3.one * (Figure != null ? Figure.transform.localScale.x / 3f : 1 / 3f);
+            var startingScale = Vector3.one * (Figure != null ? Figure.transform.localScale.x : 1 / 3f);
+            if (CanHaveAnimation(name))
+            {
+                res.transform.localScale = startingScale;
+                Main.Instance.StartCoroutine(Utils.DecreaseScaleAsync(res.transform, targetScale, _properties.Delay * 0.8f));
+            }
+            else
+                res.transform.localScale = targetScale;
             return res;
         }
 
@@ -129,7 +136,7 @@ namespace Scripts.D3.Menger
             vertices.Add("GFH", GetOppositeVertice(vertices["G"], vertices["GF"], vertices["GH"]));
             vertices.Add("GCF", GetOppositeVertice(vertices["G"], vertices["GC"], vertices["GF"]));
             vertices.Add("GCH", GetOppositeVertice(vertices["G"], vertices["GC"], vertices["GH"]));
-            
+
             vertices.Add("HEG", GetOppositeVertice(vertices["H"], vertices["HE"], vertices["HG"]));
             vertices.Add("HDE", GetOppositeVertice(vertices["H"], vertices["HD"], vertices["HE"]));
             vertices.Add("HDG", GetOppositeVertice(vertices["H"], vertices["HD"], vertices["HG"]));
@@ -365,5 +372,7 @@ namespace Scripts.D3.Menger
             Vector3 positionC = A + vectorABD * 2;
             return positionC;
         }
+
+        private bool CanHaveAnimation(string name) => name == "A";
     }
 }

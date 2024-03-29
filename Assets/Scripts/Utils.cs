@@ -1,3 +1,4 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
@@ -29,5 +30,20 @@ public static class Utils
         Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
 
         transform.rotation = Quaternion.Euler(0f, targetRotation.eulerAngles.y, 0f);
+    }
+
+    public static IEnumerator DecreaseScaleAsync(Transform transform, Vector3 targetScale, float duration)
+    {
+        Vector3 initialScale = transform.localScale;
+        float timer = 0f;
+        while (timer < duration)
+        {
+            float progress = timer / duration;
+            Vector3 currentScale = Vector3.Lerp(initialScale, targetScale, progress);
+            transform.localScale = currentScale;
+            yield return null;
+            timer += Time.deltaTime;
+        }
+        transform.localScale = targetScale;
     }
 }
