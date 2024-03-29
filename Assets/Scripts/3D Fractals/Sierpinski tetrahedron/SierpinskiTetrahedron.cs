@@ -10,12 +10,7 @@ namespace Scripts.D3.Sierpinski
         [SerializeField] private PyramidProperties _properties;
         void Start()
         {
-            new Pyramid(new Vector3[] {
-                _vertices[0].position,
-                _vertices[1].position,
-                _vertices[2].position,
-                _vertices[3].position,
-            }, _properties, 0);
+            new Pyramid(Utils.GetPositions(_vertices), _properties, 0);
         }
     }
 

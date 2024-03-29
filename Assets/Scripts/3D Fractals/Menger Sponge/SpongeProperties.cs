@@ -8,5 +8,6 @@ namespace Scripts.D3.Menger
         public GameObject Prefab;
         public Transform Parent;
         public int IterationLimit;
+        public float Delay;
     }
 }

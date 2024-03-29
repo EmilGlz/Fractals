@@ -1,15 +1,17 @@
+using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-using UnityEngine.UIElements;
 
 namespace Scripts.D3.Menger
 {
     public class MengerSponge : MonoBehaviour
     {
+        [SerializeField] Transform[] _vertices;
         [SerializeField] private SpongeProperties _properties;
 
         void Start()
         {
+            var cube = new Cube(Utils.GetPositions(_vertices), 0, _properties);
         }
     }
 
@@ -17,11 +19,35 @@ namespace Scripts.D3.Menger
     {
         private readonly Vector3[] _vertices;
         private readonly int _currentIterator;
+        private readonly SpongeProperties _properties;
+        private GameObject Figure;
 
-        public Cube(Vector3[] vertices, int currentIterator)
+        public Cube(Vector3[] vertices, int currentIterator, SpongeProperties properties)
         {
             _vertices = vertices;
             _currentIterator = currentIterator;
+            _properties = properties;
+            Main.Instance.StartCoroutine(GenerateChildren());
+        }
+
+
+        IEnumerator GenerateChildren()
+        {
+            yield return new WaitForSeconds(_properties.Delay);
+            var children = GenerateInsideCubes();
+            foreach (var child in children)
+            {
+                var obj = SpawnObject(child._vertices[0]);
+                child.Figure = obj;
+            }
+            Object.Destroy(Figure);
+        }
+
+        private GameObject SpawnObject(Vector3 pivotPos)
+        {
+            var res = Object.Instantiate(_properties.Prefab, _properties.Parent);
+            // TODO position, rotation fixes
+            return res;
         }
 
         public List<Cube> GenerateInsideCubes()
@@ -124,7 +150,7 @@ namespace Scripts.D3.Menger
                     vertices["ABE"],
                     vertices["ABDE"],
                     vertices["ADE"],
-                }, nextIterator),
+                }, nextIterator, _properties),
                 new Cube(new Vector3[]{
                     vertices["AB"],
                     vertices["BA"],
@@ -134,7 +160,7 @@ namespace Scripts.D3.Menger
                     vertices["BAF"],
                     vertices["BACF"],
                     vertices["ABDE"],
-                }, nextIterator),
+                }, nextIterator, _properties),
                 new Cube(new Vector3[]{
                     vertices["BA"],
                     vertices["B"],
@@ -144,7 +170,7 @@ namespace Scripts.D3.Menger
                     vertices["BF"],
                     vertices["BCF"],
                     vertices["BACF"],
-                }, nextIterator),
+                }, nextIterator, _properties),
                 new Cube(new Vector3[]{
                     vertices["BC"],
                     vertices["CB"],
@@ -154,7 +180,7 @@ namespace Scripts.D3.Menger
                     vertices["CBG"],
                     vertices["CBDG"],
                     vertices["BACF"],
-                }, nextIterator),
+                }, nextIterator, _properties),
                 new Cube(new Vector3[]{
                     vertices["C"],
                     vertices["CD"],
@@ -164,7 +190,7 @@ namespace Scripts.D3.Menger
                     vertices["CGH"],
                     vertices["CBDG"],
                     vertices["CBG"],
-                }, nextIterator),
+                }, nextIterator, _properties),
                 new Cube(new Vector3[]{
                     vertices["CD"],
                     vertices["DC"],
@@ -174,7 +200,7 @@ namespace Scripts.D3.Menger
                     vertices["DCH"],
                     vertices["DACH"],
                     vertices["CBDG"],
-                }, nextIterator),
+                }, nextIterator, _properties),
                 new Cube(new Vector3[]{
                     vertices["D"],
                     vertices["DA"],
@@ -184,7 +210,7 @@ namespace Scripts.D3.Menger
                     vertices["DAH"],
                     vertices["DACH"],
                     vertices["DCH"],
-                }, nextIterator),
+                }, nextIterator, _properties),
                 new Cube(new Vector3[]{
                     vertices["DA"],
                     vertices["AD"],
@@ -194,7 +220,7 @@ namespace Scripts.D3.Menger
                     vertices["ADE"],
                     vertices["ABDE"],
                     vertices["DACH"],
-                }, nextIterator),
+                }, nextIterator, _properties),
                 new Cube(new Vector3[]{
                     vertices["AE"],
                     vertices["ABE"],
@@ -204,7 +230,7 @@ namespace Scripts.D3.Menger
                     vertices["EAB"],
                     vertices["EAFH"],
                     vertices["AED"],
-                }, nextIterator),
+                }, nextIterator, _properties),
                 new Cube(new Vector3[]{
                     vertices["BF"],
                     vertices["BCF"],
@@ -214,7 +240,7 @@ namespace Scripts.D3.Menger
                     vertices["FBG"],
                     vertices["FBEG"],
                     vertices["FEB"],
-                }, nextIterator),
+                }, nextIterator, _properties),
                 new Cube(new Vector3[]{
                     vertices["CG"],
                     vertices["CDG"],
@@ -224,18 +250,19 @@ namespace Scripts.D3.Menger
                     vertices["GCH"],
                     vertices["GCFH"],
                     vertices["G"],
-                }, nextIterator),
+                }, nextIterator, _properties),
             };
             return newCubes;
+
+            // TODO "CHG" child not found problem
         }
 
         private static Vector3 GetOppositeVertice(Vector3 A, Vector3 B, Vector3 D)
         {
             Vector3 midpointBD = (B + D) / 2f;
             Vector3 vectorABD = midpointBD - A;
-            Vector3 positionC = A + vectorABD;
+            Vector3 positionC = A + vectorABD * 2;
             return positionC;
         }
-
     }
 }
