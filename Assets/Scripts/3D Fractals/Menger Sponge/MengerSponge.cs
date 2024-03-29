@@ -11,7 +11,7 @@ namespace Scripts.D3.Menger
 
         void Start()
         {
-            var cube = new Cube(Utils.GetPositions(_vertices), 0, _properties);
+            new Cube(Utils.GetPositions(_vertices), 0, _properties);
         }
     }
 
@@ -20,14 +20,18 @@ namespace Scripts.D3.Menger
         private readonly Vector3[] _vertices;
         private readonly int _currentIterator;
         private readonly SpongeProperties _properties;
+        private readonly string _name;
         private GameObject Figure;
 
-        public Cube(Vector3[] vertices, int currentIterator, SpongeProperties properties)
+        public Cube(Vector3[] vertices, int currentIterator, SpongeProperties properties, string name = "")
         {
             _vertices = vertices;
             _currentIterator = currentIterator;
             _properties = properties;
-            Main.Instance.StartCoroutine(GenerateChildren());
+            _name = name;
+
+            if (currentIterator < properties.IteratorLimit)
+                Main.Instance.StartCoroutine(GenerateChildren());
         }
 
 
@@ -37,16 +41,19 @@ namespace Scripts.D3.Menger
             var children = GenerateInsideCubes();
             foreach (var child in children)
             {
-                var obj = SpawnObject(child._vertices[0]);
+                var obj = SpawnObject(child._vertices[0], child._name);
                 child.Figure = obj;
             }
             Object.Destroy(Figure);
         }
 
-        private GameObject SpawnObject(Vector3 pivotPos)
+        private GameObject SpawnObject(Vector3 pivotPos, string name)
         {
             var res = Object.Instantiate(_properties.Prefab, _properties.Parent);
-            // TODO position, rotation fixes
+            res.name = name;
+            res.transform.position = pivotPos;
+            var targetScale = Vector3.one * (Figure != null ? Figure.transform.localScale.x / 3f : 1/3f);
+            res.transform.localScale = targetScale;
             return res;
         }
 
@@ -141,7 +148,8 @@ namespace Scripts.D3.Menger
             var nextIterator = _currentIterator + 1;
 
             var newCubes = new List<Cube>() { 
-                new Cube(new Vector3[]{
+                // 1ST FLOOR
+                new(new Vector3[]{
                     vertices["A"],
                     vertices["AB"],
                     vertices["ABD"],
@@ -150,8 +158,8 @@ namespace Scripts.D3.Menger
                     vertices["ABE"],
                     vertices["ABDE"],
                     vertices["ADE"],
-                }, nextIterator, _properties),
-                new Cube(new Vector3[]{
+                }, nextIterator, _properties, "A"),
+                new(new Vector3[]{
                     vertices["AB"],
                     vertices["BA"],
                     vertices["BAC"],
@@ -160,8 +168,8 @@ namespace Scripts.D3.Menger
                     vertices["BAF"],
                     vertices["BACF"],
                     vertices["ABDE"],
-                }, nextIterator, _properties),
-                new Cube(new Vector3[]{
+                }, nextIterator, _properties, "AB"),
+                new(new Vector3[]{
                     vertices["BA"],
                     vertices["B"],
                     vertices["BC"],
@@ -170,91 +178,184 @@ namespace Scripts.D3.Menger
                     vertices["BF"],
                     vertices["BCF"],
                     vertices["BACF"],
-                }, nextIterator, _properties),
-                new Cube(new Vector3[]{
+                }, nextIterator, _properties, "BA"),
+                new(new Vector3[]{
+                    vertices["BAC"],
                     vertices["BC"],
                     vertices["CB"],
                     vertices["CBD"],
-                    vertices["BAC"],
+                    vertices["BACF"],
                     vertices["BCF"],
                     vertices["CBG"],
                     vertices["CBDG"],
-                    vertices["BACF"],
-                }, nextIterator, _properties),
-                new Cube(new Vector3[]{
-                    vertices["C"],
-                    vertices["CD"],
+                }, nextIterator, _properties, "BAC"),
+                new(new Vector3[]{
                     vertices["CBD"],
                     vertices["CB"],
-                    vertices["CG"],
-                    vertices["CGH"],
+                    vertices["C"],
+                    vertices["CD"],
                     vertices["CBDG"],
                     vertices["CBG"],
-                }, nextIterator, _properties),
-                new Cube(new Vector3[]{
-                    vertices["CD"],
-                    vertices["DC"],
+                    vertices["CG"],
+                    vertices["CDG"],
+                }, nextIterator, _properties, "CBD"),
+                new(new Vector3[]{
                     vertices["DAC"],
                     vertices["CBD"],
-                    vertices["CDG"],
-                    vertices["DCH"],
+                    vertices["CD"],
+                    vertices["DC"],
                     vertices["DACH"],
                     vertices["CBDG"],
-                }, nextIterator, _properties),
-                new Cube(new Vector3[]{
-                    vertices["D"],
+                    vertices["CDG"],
+                    vertices["DCH"],
+                }, nextIterator, _properties, "DAC"),
+                new(new Vector3[]{
                     vertices["DA"],
                     vertices["DAC"],
                     vertices["DC"],
-                    vertices["DH"],
+                    vertices["D"],
                     vertices["DAH"],
                     vertices["DACH"],
                     vertices["DCH"],
-                }, nextIterator, _properties),
-                new Cube(new Vector3[]{
-                    vertices["DA"],
+                    vertices["DH"],
+                }, nextIterator, _properties, "DA"),
+                new(new Vector3[]{
                     vertices["AD"],
                     vertices["ABD"],
                     vertices["DAC"],
-                    vertices["DAH"],
+                    vertices["DA"],
                     vertices["ADE"],
                     vertices["ABDE"],
                     vertices["DACH"],
-                }, nextIterator, _properties),
-                new Cube(new Vector3[]{
+                    vertices["DAH"],
+                }, nextIterator, _properties, "DA"),
+
+                // 2ND FLOOR
+                new(new Vector3[]{
                     vertices["AE"],
                     vertices["ABE"],
                     vertices["ABDE"],
                     vertices["ADE"],
                     vertices["EA"],
-                    vertices["EAB"],
+                    vertices["EAF"],
                     vertices["EAFH"],
-                    vertices["AED"],
-                }, nextIterator, _properties),
-                new Cube(new Vector3[]{
+                    vertices["EAH"],
+                }, nextIterator, _properties, "AE"),
+                new(new Vector3[]{
+                    vertices["BAF"],
                     vertices["BF"],
                     vertices["BCF"],
                     vertices["BACF"],
-                    vertices["BAF"],
+                    vertices["FBE"],
                     vertices["FB"],
                     vertices["FBG"],
                     vertices["FBEG"],
-                    vertices["FEB"],
-                }, nextIterator, _properties),
-                new Cube(new Vector3[]{
-                    vertices["CG"],
-                    vertices["CDG"],
+                }, nextIterator, _properties, "BAF"),
+                new(new Vector3[]{
                     vertices["CBDG"],
                     vertices["CBG"],
+                    vertices["CG"],
+                    vertices["CDG"],
+                    vertices["GCFH"],
+                    vertices["GCF"],
                     vertices["GC"],
                     vertices["GCH"],
+                }, nextIterator, _properties, "CG"),
+                new(new Vector3[]{
+                    vertices["DAH"],
+                    vertices["DACH"],
+                    vertices["DCH"],
+                    vertices["DH"],
+                    vertices["HDE"],
+                    vertices["HDEG"],
+                    vertices["HDG"],
+                    vertices["HD"],
+                }, nextIterator, _properties, "DAH"),
+
+                // 3RD FLOOR
+                new(new Vector3[]{
+                    vertices["EA"],
+                    vertices["EAF"],
+                    vertices["EAFH"],
+                    vertices["EAH"],
+                    vertices["E"],
+                    vertices["EF"],
+                    vertices["EFH"],
+                    vertices["EH"],
+                }, nextIterator, _properties, "EA"),
+                new(new Vector3[]{
+                    vertices["EAF"],
+                    vertices["FBE"],
+                    vertices["FBEG"],
+                    vertices["EAFH"],
+                    vertices["EF"],
+                    vertices["FE"],
+                    vertices["FEG"],
+                    vertices["EFH"],
+                }, nextIterator, _properties, "EAF"),
+                new(new Vector3[]{
+                    vertices["FBE"],
+                    vertices["FB"],
+                    vertices["FBG"],
+                    vertices["FBEG"],
+                    vertices["FE"],
+                    vertices["F"],
+                    vertices["FG"],
+                    vertices["FEG"],
+                }, nextIterator, _properties, "FBE"),
+                new(new Vector3[]{
+                    vertices["FBEG"],
+                    vertices["FBG"],
+                    vertices["GCF"],
                     vertices["GCFH"],
+                    vertices["FEG"],
+                    vertices["FG"],
+                    vertices["GF"],
+                    vertices["GFH"],
+                }, nextIterator, _properties, "FBEG"),
+                new(new Vector3[]{
+                    vertices["GCFH"],
+                    vertices["GCF"],
+                    vertices["GC"],
+                    vertices["GCH"],
+                    vertices["GFH"],
+                    vertices["GF"],
                     vertices["G"],
-                }, nextIterator, _properties),
+                    vertices["GH"],
+                }, nextIterator, _properties, "GCFH"),
+                new(new Vector3[]{
+                    vertices["HDEG"],
+                    vertices["GCFH"],
+                    vertices["GCH"],
+                    vertices["HDG"],
+                    vertices["HEG"],
+                    vertices["GFH"],
+                    vertices["GH"],
+                    vertices["HG"],
+                }, nextIterator, _properties, "HDEG"),
+                new(new Vector3[]{
+                    vertices["HDE"],
+                    vertices["HDEG"],
+                    vertices["HDG"],
+                    vertices["HD"],
+                    vertices["HE"],
+                    vertices["HEG"],
+                    vertices["HG"],
+                    vertices["H"],
+                }, nextIterator, _properties, "HDE"),
+                new(new Vector3[]{
+                    vertices["EAH"],
+                    vertices["EAFH"],
+                    vertices["HDEG"],
+                    vertices["HDE"],
+                    vertices["EH"],
+                    vertices["EFH"],
+                    vertices["HEG"],
+                    vertices["HE"],
+                }, nextIterator, _properties, "EAH"),
+
             };
             return newCubes;
-
-            // TODO "CHG" child not found problem
         }
 
         private static Vector3 GetOppositeVertice(Vector3 A, Vector3 B, Vector3 D)

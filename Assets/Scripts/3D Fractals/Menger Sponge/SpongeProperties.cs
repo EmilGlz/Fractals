@@ -7,7 +7,7 @@ namespace Scripts.D3.Menger
     {
         public GameObject Prefab;
         public Transform Parent;
-        public int IterationLimit;
+        public int IteratorLimit;
         public float Delay;
     }
 }

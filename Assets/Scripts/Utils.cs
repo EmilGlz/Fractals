@@ -20,4 +20,14 @@ public static class Utils
             res[i] = transforms[i].position;
         return res;
     }
+
+    public static void LookAt(Transform transform, Vector3 targetPosition)
+    {
+        Vector3 directionToTarget = targetPosition - transform.position;
+        directionToTarget.y = 0f; // Ignore vertical component
+
+        Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
+
+        transform.rotation = Quaternion.Euler(0f, targetRotation.eulerAngles.y, 0f);
+    }
 }

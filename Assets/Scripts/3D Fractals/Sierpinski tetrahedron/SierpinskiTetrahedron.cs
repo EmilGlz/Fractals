@@ -77,28 +77,28 @@ namespace Scripts.D3.Sierpinski
             };
             var nextIterator = _currentIterator + 1;
             var newPyramids = new List<Pyramid>() {
-                new Pyramid(new Vector3[]
+                new (new Vector3[]
                 {
                     vertices["A"],
                     vertices["AC"],
                     vertices["AB"],
                     vertices["AD"],
                 }, _properties, nextIterator),
-                new Pyramid(new Vector3[]
+                new (new Vector3[]
                 {
                     vertices["B"],
                     vertices["AB"],
                     vertices["BC"],
                     vertices["BD"],
                 }, _properties, nextIterator),
-                new Pyramid(new Vector3[]
+                new (new Vector3[]
                 {
                     vertices["C"],
                     vertices["BC"],
                     vertices["AC"],
                     vertices["CD"],
                 }, _properties, nextIterator),
-                new Pyramid(new Vector3[]
+                new (new Vector3[]
                 {
                     vertices["AD"],
                     vertices["CD"],
@@ -116,7 +116,7 @@ namespace Scripts.D3.Sierpinski
             var startingScale = Vector3.one * (Figure != null ? Figure.transform.localScale.x : .5f);
             res.transform.SetParent(_properties.Parent);
             res.transform.position = pivotPos;
-            LookAt(res.transform, parentBaseCenter);
+            Utils.LookAt(res.transform, parentBaseCenter);
             if (fromTop)
                 res.transform.localScale = targetScale;
             else
@@ -125,16 +125,6 @@ namespace Scripts.D3.Sierpinski
                 Main.Instance.StartCoroutine(DecreaseScaleAsync(res.transform, targetScale, _properties.Delay * 0.8f));
             }
             return res;
-        }
-
-        void LookAt(Transform transform, Vector3 targetPosition)
-        {
-            Vector3 directionToTarget = targetPosition - transform.position;
-            directionToTarget.y = 0f; // Ignore vertical component
-
-            Quaternion targetRotation = Quaternion.LookRotation(directionToTarget);
-
-            transform.rotation = Quaternion.Euler(0f, targetRotation.eulerAngles.y, 0f);
         }
     }
 }
