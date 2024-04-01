@@ -29,7 +29,6 @@ namespace Scripts.D3.Menger
             _currentIterator = currentIterator;
             _properties = properties;
             _name = name;
-
             if (currentIterator < properties.IteratorLimit)
                 Main.Instance.StartCoroutine(GenerateChildren());
         }
@@ -44,24 +43,27 @@ namespace Scripts.D3.Menger
                 var obj = SpawnObject(child._vertices[0], child._name);
                 child.Figure = obj;
             }
-            Object.Destroy(Figure);
+            Instancer.Instance.DeSpawn(_vertices[0]);
         }
 
-        private GameObject SpawnObject(Vector3 pivotPos, string name)
+        private GameObject SpawnObject(Vector3 pivotPos, string name, Vector3? scale = null)
         {
-            var res = Object.Instantiate(_properties.Prefab, _properties.Parent);
-            res.name = name;
-            res.transform.localPosition = pivotPos;
-            var targetScale = Vector3.one * (Figure != null ? Figure.transform.localScale.x / 3f : 1 / 3f);
+
+            //var res = Object.Instantiate(_properties.Prefab, _properties.Parent);
+            //res.name = name;
+            //res.transform.localPosition = pivotPos;
+            var targetScale = scale ?? Vector3.one * (Figure != null ? Figure.transform.localScale.x / 3f : 1 / 3f) ;
             var startingScale = Vector3.one * (Figure != null ? Figure.transform.localScale.x : 1 / 3f);
-            if (CanHaveAnimation(name))
-            {
-                res.transform.localScale = startingScale;
-                Main.Instance.StartCoroutine(Utils.DecreaseScaleAsync(res.transform, targetScale, _properties.Delay * 0.8f));
-            }
-            else
-                res.transform.localScale = targetScale;
-            return res;
+            Instancer.Instance.Spawn(pivotPos, Quaternion.identity, targetScale);
+            //res.transform.SetParent(_properties.Parent);
+            //if (CanHaveAnimation(name))
+            //{
+            //    res.transform.localScale = startingScale;
+            //    Main.Instance.StartCoroutine(Utils.DecreaseScaleAsync(res.transform, targetScale, _properties.Delay * 0.8f));
+            //}
+            //else
+            //    res.transform.localScale = targetScale;
+            return null;
         }
 
         public List<Cube> GenerateInsideCubes()
