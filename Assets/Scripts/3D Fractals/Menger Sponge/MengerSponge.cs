@@ -21,14 +21,18 @@ namespace Scripts.D3.Menger
         private readonly int _currentIterator;
         private readonly SpongeProperties _properties;
         private readonly string _name;
-        private GameObject Figure;
-
+        private readonly float _scale;
         public Cube(Vector3[] vertices, int currentIterator, SpongeProperties properties, string name = "")
         {
             _vertices = vertices;
             _currentIterator = currentIterator;
             _properties = properties;
             _name = name;
+            _scale = Mathf.Pow(1 / 3f, currentIterator);
+            if (currentIterator == 0)
+            {
+                SpawnObject(_vertices[0], Vector3.one);
+            }
             if (currentIterator < properties.IteratorLimit)
                 Main.Instance.StartCoroutine(GenerateChildren());
         }
@@ -38,32 +42,18 @@ namespace Scripts.D3.Menger
         {
             yield return new WaitForSeconds(_properties.Delay);
             var children = GenerateInsideCubes();
+            Instancer.Instance.ClearBatches();
+            yield return null;
             foreach (var child in children)
             {
-                var obj = SpawnObject(child._vertices[0], child._name);
-                child.Figure = obj;
+                SpawnObject(child._vertices[0]);
             }
-            Instancer.Instance.DeSpawn(_vertices[0]);
         }
 
-        private GameObject SpawnObject(Vector3 pivotPos, string name, Vector3? scale = null)
+        private void SpawnObject(Vector3 pivotPos, Vector3? scale = null)
         {
-
-            //var res = Object.Instantiate(_properties.Prefab, _properties.Parent);
-            //res.name = name;
-            //res.transform.localPosition = pivotPos;
-            var targetScale = scale ?? Vector3.one * (Figure != null ? Figure.transform.localScale.x / 3f : 1 / 3f) ;
-            var startingScale = Vector3.one * (Figure != null ? Figure.transform.localScale.x : 1 / 3f);
-            Instancer.Instance.Spawn(pivotPos, Quaternion.identity, targetScale);
-            //res.transform.SetParent(_properties.Parent);
-            //if (CanHaveAnimation(name))
-            //{
-            //    res.transform.localScale = startingScale;
-            //    Main.Instance.StartCoroutine(Utils.DecreaseScaleAsync(res.transform, targetScale, _properties.Delay * 0.8f));
-            //}
-            //else
-            //    res.transform.localScale = targetScale;
-            return null;
+            var targetScale = scale ?? Mathf.Pow(1/3f, _currentIterator + 1) * Vector3.one;
+            Instancer.Instance.SpawnCube(pivotPos + targetScale * 0.5f, Quaternion.identity, targetScale);
         }
 
         public List<Cube> GenerateInsideCubes()
