@@ -261,7 +261,7 @@ MonoBehaviour:
       Color: {r: 1, g: 1, b: 1, a: 1}
       Parent: {fileID: 239790079}
       Material: {fileID: 2100000, guid: d357d46f74339274e997c3ec567431bc, type: 2}
-    IterateLimit: 5
+    IterateLimit: 10
 --- !u!1 &256948301
 GameObject:
   m_ObjectHideFlags: 0
