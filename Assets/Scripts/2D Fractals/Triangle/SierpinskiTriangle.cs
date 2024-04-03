@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Scripts.D2.Sierpinski
 {
-    public class SierpinskiTriangle : MonoBehaviour
+    public class SierpinskiTriangle : Singleton<SierpinskiTriangle>
     {
         [SerializeField] private Transform[] _angles;
         [SerializeField] private TriangleSettings _triangleSettings;
@@ -30,7 +30,7 @@ namespace Scripts.D2.Sierpinski
             _iterateCount = iterateCount;
             _triangleSettings = triangleSettings;
             if (_iterateCount < _triangleSettings.IterateLimit)
-                Main.Instance.StartCoroutine(GenerateChildren());
+                SierpinskiTriangle.Instance.StartCoroutine(GenerateChildren());
         }
 
         IEnumerator GenerateChildren()

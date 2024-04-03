@@ -260,10 +260,8 @@ MonoBehaviour:
   - {fileID: 687468236}
   - {fileID: 1678917099}
   _properties:
-    Prefab: {fileID: 2366322338077665556, guid: b917cb7a82cbce643b84dbe2940644f2, type: 3}
-    Parent: {fileID: 138145297}
     IteratorLimit: 4
-    Delay: 2
+    Delay: 1
 --- !u!1 &376588205
 GameObject:
   m_ObjectHideFlags: 0

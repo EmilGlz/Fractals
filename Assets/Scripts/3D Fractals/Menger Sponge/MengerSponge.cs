@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Scripts.D3.Menger
 {
-    public class MengerSponge : MonoBehaviour
+    public class MengerSponge : Singleton<MengerSponge>
     {
         [SerializeField] Transform[] _vertices;
         [SerializeField] private SpongeProperties _properties;
@@ -34,7 +34,7 @@ namespace Scripts.D3.Menger
                 SpawnObject(_vertices[0], Vector3.one);
             }
             if (currentIterator < properties.IteratorLimit)
-                Main.Instance.StartCoroutine(GenerateChildren());
+                MengerSponge.Instance.StartCoroutine(GenerateChildren());
         }
 
 

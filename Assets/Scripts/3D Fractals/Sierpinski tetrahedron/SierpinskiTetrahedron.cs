@@ -4,7 +4,7 @@ using UnityEngine;
 
 namespace Scripts.D3.Sierpinski
 {
-    public class SierpinskiTetrahedron : MonoBehaviour
+    public class SierpinskiTetrahedron : Singleton<SierpinskiTetrahedron>
     {
         [SerializeField] Transform[] _vertices;
         [SerializeField] private PyramidProperties _properties;
@@ -31,7 +31,7 @@ namespace Scripts.D3.Sierpinski
 
             _baseCenter = Utils.GetMiddle(_pivotPositions[0], _pivotPositions[1], _pivotPositions[2]);
             if (currentIterator < properties.IteratorLimit)
-                Main.Instance.StartCoroutine(GenerateChildren());
+                SierpinskiTetrahedron.Instance.StartCoroutine(GenerateChildren());
         }
 
         IEnumerator GenerateChildren()
@@ -107,7 +107,7 @@ namespace Scripts.D3.Sierpinski
             else
             {
                 res.transform.localScale = startingScale;
-                Main.Instance.StartCoroutine(Utils.DecreaseScaleAsync(res.transform, targetScale, _properties.Delay * 0.8f));
+                SierpinskiTetrahedron.Instance.StartCoroutine(Utils.DecreaseScaleAsync(res.transform, targetScale, _properties.Delay * 0.8f));
             }
             return res;
         }

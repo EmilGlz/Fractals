@@ -4,10 +4,10 @@ using UnityEngine;
 
 namespace Scripts.D3.Menger
 {
-    public class MegnerSpongeWithPrefabs : MonoBehaviour
+    public class MegnerSpongeWithPrefabs : Singleton<MegnerSpongeWithPrefabs>
     {
         [SerializeField] Transform[] _vertices;
-        [SerializeField] private SpongeProperties _properties;
+        [SerializeField] private SpongePropertiesWithPrefab _properties;
 
         void Start()
         {
@@ -19,11 +19,11 @@ namespace Scripts.D3.Menger
     {
         private readonly Vector3[] _vertices;
         private readonly int _currentIterator;
-        private readonly SpongeProperties _properties;
+        private readonly SpongePropertiesWithPrefab _properties;
         private readonly string _name;
         private GameObject Figure;
 
-        public CubeWithPrefab(Vector3[] vertices, int currentIterator, SpongeProperties properties, string name = "")
+        public CubeWithPrefab(Vector3[] vertices, int currentIterator, SpongePropertiesWithPrefab properties, string name = "")
         {
             _vertices = vertices;
             _currentIterator = currentIterator;
@@ -31,7 +31,7 @@ namespace Scripts.D3.Menger
             _name = name;
 
             if (currentIterator < properties.IteratorLimit)
-                Main.Instance.StartCoroutine(GenerateChildren());
+                MegnerSpongeWithPrefabs.Instance.StartCoroutine(GenerateChildren());
         }
 
 
@@ -57,7 +57,7 @@ namespace Scripts.D3.Menger
             if (CanHaveAnimation(name))
             {
                 res.transform.localScale = startingScale;
-                Main.Instance.StartCoroutine(Utils.DecreaseScaleAsync(res.transform, targetScale, _properties.Delay * 0.8f));
+                MegnerSpongeWithPrefabs.Instance.StartCoroutine(Utils.DecreaseScaleAsync(res.transform, targetScale, _properties.Delay * 0.8f));
             }
             else
                 res.transform.localScale = targetScale;
