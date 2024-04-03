@@ -54,12 +54,7 @@ namespace Assets.Scripts
 
         private void GetViews()
         {
-            _views = new List<View>();
-            for(int i = 0; i < _canvas.transform.childCount ; i++)
-            {
-                if(_canvas.transform.GetChild(i).TryGetComponent<View>(out var view))
-                    _views.Add(view);
-            }
+            _views = _canvas.transform.GetComponentsInChildren<View>().ToList();
         }
 
         private void AdjustPerformance()
