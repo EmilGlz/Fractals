@@ -18,11 +18,13 @@ namespace Assets.Scripts
 
         public override void Enter()
         {
+            base.Enter();
             _canCheckFPS = true;
         }
 
         public override void Exit()
         {
+            base.Exit();
             _canCheckFPS = false;
         }
 

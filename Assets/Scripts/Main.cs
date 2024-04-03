@@ -14,6 +14,7 @@ namespace Assets.Scripts
         private GameObject _canvas;
         void Start()
         {
+            AdjustPerformance();
             InitCanvas();
             GetViews();
             HideAllViews();
@@ -59,6 +60,11 @@ namespace Assets.Scripts
                 if(_canvas.transform.GetChild(i).TryGetComponent<View>(out var view))
                     _views.Add(view);
             }
+        }
+
+        private void AdjustPerformance()
+        {
+            Application.targetFrameRate = Device.TargetFrameRate; // Use device defaults
         }
     }
 }

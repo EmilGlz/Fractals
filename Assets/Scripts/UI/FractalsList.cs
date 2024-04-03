@@ -12,7 +12,7 @@ namespace Assets.Scripts.UI
         protected override void GetItems()
         {
             Items = new System.Collections.Generic.List<ListItem>();
-            var datas = ResourceHelper.LoadAllScriptableObjects<FractalData>();
+            var datas = ResourceHelper.LoadAllScriptableObjects<FractalData>("Datas");
             foreach (var data in datas)
                 Items.Add(new FractalListItem(data, _parent));
         }

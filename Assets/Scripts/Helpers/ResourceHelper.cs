@@ -17,71 +17,18 @@ namespace Assets.Scripts
             return instance;
         }
 
-        public static List<T> LoadAllScriptableObjects<T>() where T : ScriptableObject
+        public static List<T> LoadAllScriptableObjects<T>(string folderPath) where T : ScriptableObject
         {
-            List<T> loadedAssets = new List<T>();
+            List<T> loadedAssets = new();
 
-            // Get all paths to assets in the Resources folder
-            string[] assetPaths = GetAllResourcePaths<T>();
-
-            // Load all assets that are of type T
-            foreach (string path in assetPaths)
+            // Load all assets from the specified folder
+            T[] assets = Resources.LoadAll<T>(folderPath);
+            foreach (T asset in assets)
             {
-                T asset = Resources.Load<T>(path);
-                if (asset != null)
-                {
-                    loadedAssets.Add(asset);
-                }
-                else
-                {
-                    Debug.LogWarning("Failed to load asset at path: " + path);
-                }
+                loadedAssets.Add(asset);
             }
 
             return loadedAssets;
-        }
-
-        private static string[] GetAllResourcePaths<T>() where T : ScriptableObject
-        {
-            List<string> paths = new List<string>();
-
-            // Find all assets of type T in the Resources folder
-            string typeName = typeof(T).Name;
-            string[] guids = UnityEditor.AssetDatabase.FindAssets("t:" + typeName);
-
-            foreach (string guid in guids)
-            {
-                string path = UnityEditor.AssetDatabase.GUIDToAssetPath(guid);
-                if (!string.IsNullOrEmpty(path))
-                {
-                    paths.Add(GetResourcePath(path));
-                }
-            }
-
-            return paths.ToArray();
-        }
-
-        private static string GetResourcePath(string absolutePath)
-        {
-            int resourcesIndex = absolutePath.IndexOf("Resources/");
-            if (resourcesIndex != -1)
-            {
-                string relativePath = absolutePath.Substring(resourcesIndex + "Resources/".Length);
-                int extensionIndex = relativePath.LastIndexOf('.');
-                if (extensionIndex != -1)
-                {
-                    return relativePath.Substring(0, extensionIndex);
-                }
-                else
-                {
-                    return relativePath;
-                }
-            }
-            else
-            {
-                Debug.LogError("Asset is not in the Resources folder: " + absolutePath);
-                return null;
-            }
         }
     }
 }
