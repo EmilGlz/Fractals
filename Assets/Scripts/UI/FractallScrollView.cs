@@ -2,18 +2,18 @@ using UnityEngine;
 
 namespace Assets.Scripts.UI
 {
-    public class FractallScrollView : MonoBehaviour
+    public class FractallScrollView : View
     {
         [SerializeField] private Transform _content;
-        void Start()
+        private FractalsList _list;
+        public override void Enter()
         {
-            EnterView();    
-        }
-
-        private void EnterView()
-        {
-            var list = new FractalsList(_content);
-            list.Load();
+            base.Enter();
+            if(_list == null)
+            {
+                _list = new FractalsList(_content);
+                _list.Load();
+            }
         }
     }
 }
