@@ -30,6 +30,8 @@ namespace Assets.Scripts.D3.Menger
             _properties = properties;
             _name = name;
 
+            if (currentIterator == 0)
+                Figure = SpawnObject(new Vector3(-.5f, 0, -.5f), "");
             if (currentIterator < properties.IteratorLimit)
                 MegnerSpongeWithPrefabs.Instance.StartCoroutine(GenerateChildren());
         }
@@ -52,8 +54,8 @@ namespace Assets.Scripts.D3.Menger
             var res = Object.Instantiate(_properties.Prefab, _properties.Parent);
             res.name = name;
             res.transform.localPosition = pivotPos;
-            var targetScale = Vector3.one * (Figure != null ? Figure.transform.localScale.x / 3f : 1 / 3f);
-            var startingScale = Vector3.one * (Figure != null ? Figure.transform.localScale.x : 1 / 3f);
+            var targetScale = Vector3.one * (Figure != null ? Figure.transform.localScale.x / 3f : 1);
+            var startingScale = Vector3.one * (Figure != null ? Figure.transform.localScale.x : 1);
             if (CanHaveAnimation(name))
             {
                 res.transform.localScale = startingScale;
