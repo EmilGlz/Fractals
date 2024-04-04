@@ -1,13 +1,37 @@
+using Scripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
-
 namespace Assets.Scripts.D3.Menger
 {
-    public class MengerSponge : Singleton<MengerSponge>
+    public class MengerSponge : Singleton<MengerSponge>, IFractalManager
     {
         [SerializeField] Transform[] _vertices;
         [SerializeField] private SpongeProperties _properties;
+
+
+        private Color? _currentColor;
+        public Color CurrentColor
+        {
+            get
+            {
+                if (_currentColor.HasValue)
+                    return _currentColor.Value;
+                return _properties.Color;
+            }
+            set
+            {
+                _currentColor = value;
+                Instancer.Instance.Material.color = _currentColor.Value;
+            }
+        }
+
+        protected override void Awake()
+        {
+            base.Awake();
+            if (this is IFractalManager i)
+                i.PromoteClass();
+        }
 
         void Start()
         {
