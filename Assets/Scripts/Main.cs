@@ -1,5 +1,6 @@
 using Assets.Scripts.ScriptableObjects;
 using Assets.Scripts.UI;
+using Scripts;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
@@ -13,7 +14,7 @@ namespace Assets.Scripts
         protected override bool KeepAlive => true;
         private List<View> _views;
         private View _currentView;
-        private GameObject _canvas;
+        private RectTransform _canvas;
         void Start()
         {
             AdjustPerformance();
@@ -23,10 +24,16 @@ namespace Assets.Scripts
             EnterView<FractallScrollView>();
         }
 
+        public IFractalManager FractalManager { get; private set; }
+        public void Construct(IFractalManager fractalManager)
+        {
+            FractalManager = fractalManager;
+        }
+
         public void InitCanvas()
         {
-            _canvas = ResourceHelper.LoadPrefab("Prefabs/Canvas");
-            _canvas.transform.SetParent(transform);
+            _canvas = ResourceHelper.LoadPrefab("Prefabs/Canvas").GetComponent<RectTransform>();
+            _canvas.SetParent(transform);
         }
 
         private void HideAllViews()
@@ -56,6 +63,8 @@ namespace Assets.Scripts
 
         private void GetViews()
         {
+            for (int i = 0; i < _canvas.transform.childCount; i++)
+                _canvas.transform.GetChild(i).gameObject.SetActive(true);
             _views = _canvas.transform.GetComponentsInChildren<View>().ToList();
         }
 
@@ -63,5 +72,8 @@ namespace Assets.Scripts
         {
             Application.targetFrameRate = Device.TargetFrameRate; // Use device defaults
         }
+
+        public float DeviceHeight => _canvas.GetHeight();
+        public float DeviceWidth => _canvas.GetWidth();
     }
 }

@@ -1,3 +1,6 @@
+
+using UnityEngine;
+
 namespace Assets.Scripts.D3.Menger
 {
     [System.Serializable]
@@ -5,5 +8,6 @@ namespace Assets.Scripts.D3.Menger
     {
         public int IteratorLimit;
         public float Delay;
+        public Color Color;
     }
 }
