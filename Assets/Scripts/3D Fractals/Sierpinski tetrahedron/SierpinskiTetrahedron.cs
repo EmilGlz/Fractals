@@ -19,17 +19,14 @@ namespace Scripts.D3.Sierpinski
         private readonly Vector3[] _pivotPositions;
         private readonly PyramidProperties _properties;
         private readonly int _currentIterator;
-        private readonly bool _isTop;
-        private readonly Vector3 _baseCenter;
+        private readonly bool _spawnWithAnimation;
         private GameObject Figure;
-        public Pyramid(Vector3[] pivotPositions, PyramidProperties properties, int currentIterator, bool isTop = false)
+        public Pyramid(Vector3[] pivotPositions, PyramidProperties properties, int currentIterator, bool spawnWithAnimation = false)
         {
             _pivotPositions = pivotPositions;
             _properties = properties;
             _currentIterator = currentIterator;
-            _isTop = isTop;
-
-            _baseCenter = Utils.GetMiddle(_pivotPositions[0], _pivotPositions[1], _pivotPositions[2]);
+            _spawnWithAnimation = spawnWithAnimation;
             if (currentIterator < properties.IteratorLimit)
                 SierpinskiTetrahedron.Instance.StartCoroutine(GenerateChildren());
         }
@@ -40,7 +37,7 @@ namespace Scripts.D3.Sierpinski
             var children = GenerateInsideTriangles();
             foreach (var child in children)
             {
-                var obj = SpawnObject(child._pivotPositions[0], child._baseCenter, _isTop);
+                var obj = SpawnObject(child._pivotPositions[0], child._spawnWithAnimation);
                 child.Figure = obj;
             }
             Object.Destroy(Figure);
@@ -65,44 +62,43 @@ namespace Scripts.D3.Sierpinski
                 new (new Vector3[]
                 {
                     vertices["A"],
-                    vertices["AC"],
                     vertices["AB"],
+                    vertices["AC"],
                     vertices["AD"],
-                }, _properties, nextIterator),
+                }, _properties, nextIterator, spawnWithAnimation: true),
                 new (new Vector3[]
                 {
+                    vertices["AB"],
                     vertices["B"],
-                    vertices["AB"],
                     vertices["BC"],
                     vertices["BD"],
                 }, _properties, nextIterator),
                 new (new Vector3[]
                 {
-                    vertices["C"],
-                    vertices["BC"],
                     vertices["AC"],
+                    vertices["BC"],
+                    vertices["C"],
                     vertices["CD"],
                 }, _properties, nextIterator),
                 new (new Vector3[]
                 {
                     vertices["AD"],
-                    vertices["CD"],
                     vertices["BD"],
+                    vertices["CD"],
                     vertices["D"],
-                }, _properties, nextIterator, true),
+                }, _properties, nextIterator),
             };
             return newPyramids;
         }
 
-        private GameObject SpawnObject(Vector3 pivotPos, Vector3 parentBaseCenter, bool fromTop)
+        private GameObject SpawnObject(Vector3 pivotPos, bool withAnimation)
         {
             var res = Object.Instantiate(_properties.PyramidPrefab, _properties.Parent);
             var targetScale = Vector3.one * (Figure != null ? Figure.transform.localScale.x / 2f : .5f);
             var startingScale = Vector3.one * (Figure != null ? Figure.transform.localScale.x : .5f);
             res.transform.SetParent(_properties.Parent);
             res.transform.position = pivotPos;
-            Utils.LookAt(res.transform, parentBaseCenter);
-            if (fromTop)
+            if (!withAnimation)
                 res.transform.localScale = targetScale;
             else
             {
