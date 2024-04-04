@@ -27,6 +27,8 @@ namespace Scripts.D3.Sierpinski
             _properties = properties;
             _currentIterator = currentIterator;
             _spawnWithAnimation = spawnWithAnimation;
+            if (currentIterator == 0)
+                Figure = SpawnObject(_pivotPositions[0], false);
             if (currentIterator < properties.IteratorLimit)
                 SierpinskiTetrahedron.Instance.StartCoroutine(GenerateChildren());
         }
@@ -94,8 +96,8 @@ namespace Scripts.D3.Sierpinski
         private GameObject SpawnObject(Vector3 pivotPos, bool withAnimation)
         {
             var res = Object.Instantiate(_properties.PyramidPrefab, _properties.Parent);
-            var targetScale = Vector3.one * (Figure != null ? Figure.transform.localScale.x / 2f : .5f);
-            var startingScale = Vector3.one * (Figure != null ? Figure.transform.localScale.x : .5f);
+            var targetScale = Figure != null ? Vector3.one * Figure.transform.localScale.x / 2f : Vector3.one;
+            var startingScale = Figure != null ? Vector3.one * Figure.transform.localScale.x : Vector3.one;
             res.transform.SetParent(_properties.Parent);
             res.transform.position = pivotPos;
             if (!withAnimation)
