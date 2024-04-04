@@ -36,7 +36,7 @@ namespace Assets.Scripts
             backButton.onClick.AddListener(() =>
             {
                 Main.Instance.EnterView<FractallScrollView>();
-                Main.Instance.LoadScene(0);
+                Main.Instance.LoadScene("MainMenu");
             });
         }
 

@@ -400,7 +400,7 @@ MonoBehaviour:
   m_Name: 
   m_EditorClassIdentifier: 
   _properties:
-    IteratorLimit: 10
+    IteratorLimit: 7
     Delay: 1
     Prefab: {fileID: 4718627153637242431, guid: dad01519b214cd4448806ebe630b2ab4, type: 3}
     Parent: {fileID: 1510973432}

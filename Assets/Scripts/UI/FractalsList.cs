@@ -12,14 +12,8 @@ namespace Assets.Scripts.UI
         protected override void GetItems()
         {
             Items = new System.Collections.Generic.List<ListItem>();
-            var datas = ResourceHelper.LoadAllScriptableObjects<FractalData>("Datas");
-            foreach (var data in datas)
+            foreach (var data in Main.Instance.FractalDatas)
                 Items.Add(new FractalListItem(data, _parent));
-        }
-
-        protected override void SortItems()
-        {
-            Items.Sort((x, y) => x.Data.Id.CompareTo(y.Data.Id));
         }
     }
 }

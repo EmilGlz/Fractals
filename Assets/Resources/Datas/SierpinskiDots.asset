@@ -16,4 +16,4 @@ MonoBehaviour:
   Title: Sierpinski Dots
   Prefab: {fileID: 1883990345724783518, guid: 7fb04393123225c4095142510040f363, type: 3}
   Thumbnail: {fileID: 21300000, guid: 2a57b5a61986b014ebc6aa6da664045b, type: 3}
-  SceneIndex: 4
+  SceneName: Sierpinski Dots

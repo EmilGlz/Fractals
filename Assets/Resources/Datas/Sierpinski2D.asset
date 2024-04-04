@@ -16,4 +16,4 @@ MonoBehaviour:
   Title: Sierpinski 2D
   Prefab: {fileID: 1883990345724783518, guid: 7fb04393123225c4095142510040f363, type: 3}
   Thumbnail: {fileID: 21300000, guid: 05d3d24a7bd0c9148ae7903ea964a720, type: 3}
-  SceneIndex: 3
+  SceneName: Sierpinski Triangle

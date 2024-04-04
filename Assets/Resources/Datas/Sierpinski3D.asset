@@ -12,8 +12,8 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: e92f38f17be05c34394f3703e637e4a2, type: 3}
   m_Name: Sierpinski3D
   m_EditorClassIdentifier: 
-  Id: 1
+  Id: 2
   Title: Sierpinski 3D
   Prefab: {fileID: 1883990345724783518, guid: 7fb04393123225c4095142510040f363, type: 3}
   Thumbnail: {fileID: 21300000, guid: 6f4c43eb7ad89bf458cd08b3b09163d9, type: 3}
-  SceneIndex: 2
+  SceneName: Sierpinski 3D

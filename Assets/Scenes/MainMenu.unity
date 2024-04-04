@@ -244,6 +244,14 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: b955d2b41948ac54887597121fbde43f, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  FractalDatas:
+  - {fileID: 11400000, guid: b4f3cd9d671c9bb42be8ba4ecee33c8d, type: 2}
+  - {fileID: 11400000, guid: 7233203032af683489d51c0a0f0ebd62, type: 2}
+  - {fileID: 11400000, guid: 19f308f7558b5654d841484411c5836a, type: 2}
+  - {fileID: 11400000, guid: a710f70d7c0349b4cbec0eb2ce549aa4, type: 2}
+  - {fileID: 11400000, guid: 53e43987b873a6f44bced1b965e8fff2, type: 2}
+  - {fileID: 11400000, guid: 3bf099e519fcc3f45bdcdeb303d0a99f, type: 2}
+  - {fileID: 11400000, guid: 9f47f381b4425cc41b5c9a61f0008462, type: 2}
 --- !u!4 &1562187870
 Transform:
   m_ObjectHideFlags: 0

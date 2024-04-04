@@ -1,3 +1,4 @@
+using Assets.Scripts.ScriptableObjects;
 using Assets.Scripts.UI;
 using System.Collections.Generic;
 using System.Linq;
@@ -8,6 +9,7 @@ namespace Assets.Scripts
 {
     public class Main : Singleton<Main>
     {
+        public List<FractalData> FractalDatas;
         protected override bool KeepAlive => true;
         private List<View> _views;
         private View _currentView;
@@ -36,12 +38,12 @@ namespace Assets.Scripts
             }
         }
 
-        public void LoadScene(int index)
+        public void LoadScene(string sceneName)
         {
-            var currentScene = SceneManager.GetActiveScene().buildIndex;
-            if (currentScene == index)
+            var currentScene = SceneManager.GetActiveScene().name;
+            if (currentScene == sceneName)
                 return;
-            SceneManager.LoadScene(index);
+            SceneManager.LoadScene(sceneName);
         }
 
         public void EnterView<T>() where T : View
