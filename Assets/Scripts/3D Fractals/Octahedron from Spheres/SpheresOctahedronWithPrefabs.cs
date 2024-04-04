@@ -3,7 +3,7 @@ using System.Collections.Generic;
 using Unity.Mathematics;
 using UnityEngine;
 
-namespace Scripts.D3.OctahedronSpheres
+namespace Assets.Scripts.D3.OctahedronSpheres
 {
     public class SpheresOctahedronWithPrefabs : Singleton<SpheresOctahedronWithPrefabs>
     {

@@ -1,4 +1,4 @@
-namespace Scripts.D3.OctahedronSpheres
+namespace Assets.Scripts.D3.OctahedronSpheres
 {
     [System.Serializable]
     public struct SpheresOctahedronProperties

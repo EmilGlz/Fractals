@@ -1,5 +1,5 @@
 using UnityEngine;
-namespace Scripts
+namespace Assets.Scripts
 {
     [System.Serializable]
     public struct PyramidProperties

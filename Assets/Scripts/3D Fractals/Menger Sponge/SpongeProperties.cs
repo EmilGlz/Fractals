@@ -1,4 +1,4 @@
-namespace Scripts.D3.Menger
+namespace Assets.Scripts.D3.Menger
 {
     [System.Serializable]
     public struct SpongeProperties

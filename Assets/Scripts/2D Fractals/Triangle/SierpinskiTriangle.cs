@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Scripts.D2.Sierpinski
+namespace Assets.Scripts.D2.Sierpinski
 {
     public class SierpinskiTriangle : Singleton<SierpinskiTriangle>
     {

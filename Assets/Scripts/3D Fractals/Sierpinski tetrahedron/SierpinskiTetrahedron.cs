@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Scripts.D3.Sierpinski
+namespace Assets.Scripts.D3.Sierpinski
 {
     public class SierpinskiTetrahedron : Singleton<SierpinskiTetrahedron>
     {

@@ -1,6 +1,6 @@
 using System.Collections;
 using UnityEngine;
-namespace Scripts.D2.Sierpinski
+namespace Assets.Scripts.D2.Sierpinski
 {
     public class SierpinskiRandomDot : MonoBehaviour
     {

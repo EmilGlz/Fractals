@@ -2,7 +2,7 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
-namespace Scripts.D3.Menger
+namespace Assets.Scripts.D3.Menger
 {
     public class MengerSponge : Singleton<MengerSponge>
     {
