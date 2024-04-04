@@ -12,6 +12,9 @@ EditorBuildSettings:
     path: Assets/Scenes/Menger Sponge.unity
     guid: 83c38907e3dd7884799f2312cadbe549
   - enabled: 1
+    path: Assets/Scenes/Menger Sponge With Prefabs.unity
+    guid: b8948498b4dadd4448ff75ab5362868a
+  - enabled: 1
     path: Assets/Scenes/Sierpinski 3D.unity
     guid: 698503fb086329046942abdd53be9219
   - enabled: 1
@@ -20,6 +23,9 @@ EditorBuildSettings:
   - enabled: 1
     path: Assets/Scenes/Sierpinski Dots.unity
     guid: 2cda990e2423bbf4892e6590ba056729
+  - enabled: 1
+    path: Assets/Scenes/Spheres Octahedron.unity
+    guid: 8d5fbc053eeed2b4c9aba446415a525c
   - enabled: 1
     path: Assets/Scenes/Spheres Octahedron With Prefabs.unity
     guid: cdc682a0f0089804a9675447ebc6097f
