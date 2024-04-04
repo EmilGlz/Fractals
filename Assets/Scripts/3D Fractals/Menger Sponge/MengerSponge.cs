@@ -53,7 +53,7 @@ namespace Scripts.D3.Menger
         private void SpawnObject(Vector3 pivotPos, Vector3? scale = null)
         {
             var targetScale = scale ?? Mathf.Pow(1/3f, _currentIterator + 1) * Vector3.one;
-            Instancer.Instance.SpawnCube(pivotPos + targetScale * 0.5f, Quaternion.identity, targetScale);
+            Instancer.Instance.SpawnMesh(pivotPos + targetScale * 0.5f, Quaternion.identity, targetScale);
         }
 
         public List<Cube> GenerateInsideCubes()
