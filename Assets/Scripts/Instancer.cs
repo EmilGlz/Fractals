@@ -20,7 +20,7 @@ public class Instancer : Singleton<Instancer>
         RenderBatches();
     }
 
-    public void SpawnCube(Vector3 position, Quaternion rotation, Vector3 scale)
+    public void SpawnMesh(Vector3 position, Quaternion rotation, Vector3 scale)
     {
         var elementsCountInLastBatch = Batches.Count > 0 ? Batches[^1].Count : 1000; // if there is no batches yet, create new one
         var matrix = Matrix4x4.TRS(position, rotation, scale);
@@ -43,7 +43,7 @@ public class Instancer : Singleton<Instancer>
         Batches.Clear();
     }
 
-    public void DespawnCube(Vector3 position, Vector3 scale)
+    public void DespawnMesh(Vector3 position, Vector3 scale)
     {
         for (int i = 0; i < Batches.Count; i++)
         {

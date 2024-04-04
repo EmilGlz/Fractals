@@ -47,6 +47,21 @@ public static class Utils
         transform.localScale = targetScale;
     }
 
+    public static IEnumerator ChangeScaleAsync(Transform transform, Vector3 startScale, Vector3 targetScale, float duration)
+    {
+        transform.localScale = startScale;
+        float timer = 0f;
+        while (timer < duration)
+        {
+            float progress = timer / duration;
+            Vector3 currentScale = Vector3.Lerp(startScale, targetScale, progress);
+            transform.localScale = currentScale;
+            timer += Time.deltaTime;
+            yield return null;
+        }
+        transform.localScale = targetScale;
+    }
+
     public static GameObject FindGameObject(string name, GameObject parentOrSelf)
     {
         if (parentOrSelf == null)
