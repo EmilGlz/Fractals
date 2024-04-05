@@ -1,6 +1,8 @@
+using Assets.Scripts;
 using System;
 using System.Collections;
 using UnityEngine;
+using UnityEngine.UI;
 
 public static class Utils
 {
@@ -100,5 +102,78 @@ public static class Utils
         var go = FindGameObject(name, parentOrSelf.gameObject);
         if (go == null) return null;
         return go.GetComponent<T>();
+    }
+
+    public static Vector2 Abs(Vector2 sz)
+    {
+        return new Vector2(Mathf.Abs(sz.x), Mathf.Abs(sz.y));
+    }
+
+    public static Vector3 Abs(Vector3 sz)
+    {
+        return new Vector3(Mathf.Abs(sz.x), Mathf.Abs(sz.y), Mathf.Abs(sz.z));
+    }
+
+    public static void RunAsync(Action action, float timeoutInSeconds = 0, bool afterEndFrame = false)
+    {
+        if (action == null || Main.Instance == null)
+            return;
+        Main.Instance.StartCoroutine(RunActionAsap(action, timeoutInSeconds, afterEndFrame));
+    }
+
+    private static IEnumerator RunActionAsap(Action action, float timeoutInSeconds = 0, bool afterEndFrame = false)
+    {
+        if (timeoutInSeconds > 0)
+            yield return new WaitForSeconds(timeoutInSeconds);
+        else if (!afterEndFrame)
+            yield return null;
+
+        if (afterEndFrame)
+        {
+            yield return new WaitForEndOfFrame();
+            yield return new WaitForEndOfFrame();
+        }
+
+        action?.Invoke();
+    }
+
+    public static void ForceUpdateCanvases(GameObject gameObject)
+    {
+        if (gameObject == null)
+            return;
+
+        ForceUpdateLayout(gameObject.GetComponent<RectTransform>());
+        gameObject.SetActive(!gameObject.activeSelf);
+        gameObject.SetActive(!gameObject.activeSelf);
+    }
+
+    public static void ForceUpdateCanvases()
+    {
+        Canvas.ForceUpdateCanvases();
+    }
+
+    public static void ForceUpdateCanvases(Component component)
+    {
+        if (component == null)
+            return;
+
+        ForceUpdateCanvases(component.gameObject);
+    }
+
+    public static void ForceUpdateLayout(GameObject gameObject)
+    {
+        if (gameObject == null)
+            return;
+
+        var rectTransform = gameObject.GetComponent<RectTransform>();
+        ForceUpdateLayout(rectTransform);
+    }
+
+    public static void ForceUpdateLayout(RectTransform rectTransform)
+    {
+        if (rectTransform == null)
+            return;
+
+        LayoutRebuilder.ForceRebuildLayoutImmediate(rectTransform);
     }
 }

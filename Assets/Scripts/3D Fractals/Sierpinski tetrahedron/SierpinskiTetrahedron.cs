@@ -1,13 +1,21 @@
+using Scripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts.D3.Sierpinski
 {
-    public class SierpinskiTetrahedron : Singleton<SierpinskiTetrahedron>
+    public class SierpinskiTetrahedron : Singleton<SierpinskiTetrahedron>, IFractalManager
     {
         [SerializeField] Transform[] _vertices;
         [SerializeField] private PyramidProperties _properties;
+
+        public Color CurrentColor { 
+            get => _properties.Material.color; 
+            set => _properties.Material.color = value;
+        }
+        public bool CanChangeColor => true;
+
         void Start()
         {
             new Pyramid(Utils.GetPositions(_vertices), _properties, 0);

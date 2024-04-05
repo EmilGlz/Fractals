@@ -29,8 +29,8 @@ namespace Assets.Scripts.UI
         {
             if (Data is not FractalData fractal)
                 return;
-            Main.Instance.EnterView<GameView>();
             Main.Instance.LoadScene(fractal.SceneName);
+            Main.Instance.EnterView<GameView>();
         }
     }
 }

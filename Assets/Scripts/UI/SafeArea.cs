@@ -23,6 +23,12 @@ namespace Assets.Scripts
 
             rectTransform.anchorMin = minAnchor;
             rectTransform.anchorMax = maxAnchor;
+            rectTransform.pivot = Vector2.zero;
         }
+
+        public float Height => rectTransform != null ? rectTransform.GetHeight() : 0;
+        public float Width => rectTransform != null ? rectTransform.GetWidth() : 0;
+        public Vector2 AnchorMax => rectTransform.anchorMax;
+        public Vector2 AnchorMin => rectTransform.anchorMin;
     }
 }

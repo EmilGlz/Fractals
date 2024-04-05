@@ -5,7 +5,7 @@ namespace Assets.Scripts
 {
     public static class ResourceHelper
     {
-        public static GameObject LoadPrefab(string path)
+        public static GameObject LoadPrefab(string path, Transform parent)
         {
             GameObject prefab = Resources.Load<GameObject>(path);
             if (prefab == null)
@@ -14,6 +14,8 @@ namespace Assets.Scripts
                 return null;
             }
             GameObject instance = Object.Instantiate(prefab);
+            instance.transform.SetParent(parent);
+            instance.transform.localScale = Vector3.one;
             return instance;
         }
 
@@ -29,6 +31,16 @@ namespace Assets.Scripts
             }
 
             return loadedAssets;
+        }
+
+        public static T Load<T>(string path) where T : Object
+        {
+            T loadedObject = Resources.Load<T>(path);
+
+            if (loadedObject == null)
+                Debug.LogError("Failed to load resource at path: " + path);
+
+            return loadedObject;
         }
     }
 }

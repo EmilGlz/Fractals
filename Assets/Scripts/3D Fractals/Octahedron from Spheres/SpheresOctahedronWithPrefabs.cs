@@ -1,3 +1,4 @@
+using Scripts;
 using System.Collections;
 using System.Collections.Generic;
 using Unity.Mathematics;
@@ -5,9 +6,16 @@ using UnityEngine;
 
 namespace Assets.Scripts.D3.OctahedronSpheres
 {
-    public class SpheresOctahedronWithPrefabs : Singleton<SpheresOctahedronWithPrefabs>
+    public class SpheresOctahedronWithPrefabs : Singleton<SpheresOctahedronWithPrefabs>, IFractalManager
     {
         [SerializeField] private SpheresOctahedronPropertiesWithPrefabs _properties;
+
+        public Color CurrentColor
+        {
+            get => _properties.Material.color;
+            set => _properties.Material.color = value;
+        }
+        public bool CanChangeColor => true;
 
         void Start()
         {

@@ -1,3 +1,4 @@
+using Scripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
@@ -8,6 +9,7 @@ namespace Assets.Scripts.D2.Sierpinski
     {
         [SerializeField] private Transform[] _angles;
         [SerializeField] private TriangleSettings _triangleSettings;
+
         private void Start()
         {
             new Triangle(new Vector2[] {

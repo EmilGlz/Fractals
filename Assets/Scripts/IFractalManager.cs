@@ -8,6 +8,7 @@ namespace Scripts
         public void PromoteClass() {
             Main.Instance.Construct(this);
         }
+        public bool CanChangeColor { get; }
         public abstract Color CurrentColor { get; set; }
     }
 }

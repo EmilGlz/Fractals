@@ -1,3 +1,4 @@
+using Scripts;
 using UnityEngine;
 
 public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
@@ -21,6 +22,8 @@ public abstract class Singleton<T> : MonoBehaviour where T : MonoBehaviour
             _instance = this as T;
             if (KeepAlive)
                 DontDestroyOnLoad(gameObject);
+            if (this is IFractalManager i)
+                i.PromoteClass();
         }
         else
         {
