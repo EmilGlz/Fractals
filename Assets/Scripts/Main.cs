@@ -4,6 +4,7 @@ using Scripts;
 using System.Collections.Generic;
 using System.Linq;
 using UnityEngine;
+using UnityEngine.Events;
 using UnityEngine.SceneManagement;
 
 namespace Assets.Scripts
@@ -14,7 +15,9 @@ namespace Assets.Scripts
         protected override bool KeepAlive => true;
         private List<View> _views;
         private View _currentView;
-        private RectTransform _canvas;
+        public RectTransform Canvas { get; private set; }
+        public RectTransform PopupLayer { get; private set; }
+        private SafeArea SafeArea;
         void Start()
         {
             AdjustPerformance();
@@ -22,18 +25,21 @@ namespace Assets.Scripts
             GetViews();
             HideAllViews();
             EnterView<FractallScrollView>();
+            InitDeviceDatas();
         }
 
         public IFractalManager FractalManager { get; private set; }
+        public UnityEvent OnFractalConstructed;
         public void Construct(IFractalManager fractalManager)
         {
             FractalManager = fractalManager;
+            OnFractalConstructed?.Invoke();
         }
 
         public void InitCanvas()
         {
-            _canvas = ResourceHelper.LoadPrefab("Prefabs/Canvas").GetComponent<RectTransform>();
-            _canvas.SetParent(transform);
+            Canvas = ResourceHelper.LoadPrefab("Prefabs/Canvas", transform).GetComponent<RectTransform>();
+            PopupLayer = Utils.FindGameObject("PopupLayer", Canvas.gameObject).GetComponent<RectTransform>();
         }
 
         private void HideAllViews()
@@ -50,6 +56,7 @@ namespace Assets.Scripts
             var currentScene = SceneManager.GetActiveScene().name;
             if (currentScene == sceneName)
                 return;
+            FractalManager = null;
             SceneManager.LoadScene(sceneName);
         }
 
@@ -63,9 +70,9 @@ namespace Assets.Scripts
 
         private void GetViews()
         {
-            for (int i = 0; i < _canvas.transform.childCount; i++)
-                _canvas.transform.GetChild(i).gameObject.SetActive(true);
-            _views = _canvas.transform.GetComponentsInChildren<View>().ToList();
+            _views = Canvas.transform.GetComponentsInChildren<View>().ToList();
+            foreach (var item in _views)
+                item.gameObject.SetActive(true);
         }
 
         private void AdjustPerformance()
@@ -73,7 +80,16 @@ namespace Assets.Scripts
             Application.targetFrameRate = Device.TargetFrameRate; // Use device defaults
         }
 
-        public float DeviceHeight => _canvas.GetHeight();
-        public float DeviceWidth => _canvas.GetWidth();
+        private void InitDeviceDatas()
+        {
+            SafeArea = Canvas.GetComponentInChildren<SafeArea>();
+            Vector2 screenSize = new(Canvas.GetWidth(), Canvas.GetHeight());
+            Device.Height = screenSize.y;
+            Device.Width = screenSize.x;
+            Device.BottomOffset = (int)(screenSize.y * SafeArea.AnchorMin.y);
+            Device.TopOffset = (int)(screenSize.y * (1 - SafeArea.AnchorMax.y));
+            Device.LeftOffset = (int)(screenSize.x * SafeArea.AnchorMin.x);
+            Device.RightOffset = (int)(screenSize.x * (1 - SafeArea.AnchorMax.x));
+        }
     }
 }

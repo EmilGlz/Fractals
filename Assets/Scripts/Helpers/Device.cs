@@ -17,5 +17,12 @@ namespace Assets.Scripts
                 return 45;
             }
         }
+
+        public static float Width;
+        public static float Height;
+        public static int TopOffset;
+        public static int BottomOffset;
+        public static int RightOffset;
+        public static int LeftOffset;
     }
 }

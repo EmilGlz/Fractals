@@ -404,7 +404,7 @@ MonoBehaviour:
     Delay: 1
     Prefab: {fileID: 4718627153637242431, guid: dad01519b214cd4448806ebe630b2ab4, type: 3}
     Parent: {fileID: 1510973432}
-    Material: {fileID: 2100000, guid: 91a98c43e46b74c4d816d3fe19b4d5ac, type: 2}
+    Material: {fileID: 2100000, guid: 32e0b7cdb6d0cf74aadc3df2f3410b62, type: 2}
 --- !u!1660057539 &9223372036854775807
 SceneRoots:
   m_ObjectHideFlags: 0

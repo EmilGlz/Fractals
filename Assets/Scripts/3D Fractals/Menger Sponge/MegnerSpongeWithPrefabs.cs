@@ -1,13 +1,21 @@
+using Scripts;
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 
 namespace Assets.Scripts.D3.Menger
 {
-    public class MegnerSpongeWithPrefabs : Singleton<MegnerSpongeWithPrefabs>
+    public class MegnerSpongeWithPrefabs : Singleton<MegnerSpongeWithPrefabs>, IFractalManager
     {
         [SerializeField] Transform[] _vertices;
         [SerializeField] private SpongePropertiesWithPrefab _properties;
+
+        public Color CurrentColor
+        {
+            get => _properties.Material.color;
+            set => _properties.Material.color = value;
+        }
+        public bool CanChangeColor => true;
 
         void Start()
         {

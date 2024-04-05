@@ -12,21 +12,15 @@ namespace Assets.Scripts
         private TMP_Text fpsText;
         float deltaTime = 0.0f;
         private bool _canCheckFPS;
-        private ColorPicker _colorPicker;
-
-        void Awake()
+        void Start()
         {
-            InitButtons();
+            Main.Instance.OnFractalConstructed.AddListener(InitButtons);
         }
-
         public override void Enter()
         {
             base.Enter();
+            InitButtons();
             _canCheckFPS = true;
-            _colorPicker = Utils.FindGameObject<ColorPicker>("ColorImage", transform);
-            _colorPicker.OnColorChange.RemoveAllListeners();
-            _colorPicker.OnColorChange.AddListener(OnColorChange);
-            _colorPicker.GetComponent<RectTransform>().SetPosY(0);
         }
 
         private void OnColorChange(Color color)
@@ -46,28 +40,22 @@ namespace Assets.Scripts
             var backButton = Utils.FindGameObject<Button>("BackButton", transform);
             var colorButton = Utils.FindGameObject<Button>("ColorButton", transform);
             backButton.onClick.RemoveAllListeners();
-            colorButton.onClick.RemoveAllListeners();
             backButton.onClick.AddListener(() =>
             {
                 Main.Instance.EnterView<FractallScrollView>();
                 Main.Instance.LoadScene("MainMenu");
             });
-            colorButton.onClick.AddListener(OpenColorPicker);
-        }
-
-        private void OpenColorPicker()
-        {
-            var popupRect = _colorPicker.GetComponent<RectTransform>();
-            popupRect.SetPosY(0);
-            var popupHeight = popupRect.GetHeight();
-            popupRect.DOMoveY(popupHeight, .5f);
-        }
-
-        private void CloseColorPicker()
-        {
-            var popupRect = _colorPicker.GetComponent<RectTransform>();
-            popupRect.SetPosY(popupRect.GetHeight());
-            popupRect.DOMoveY(0, .5f);
+            if (Main.Instance.FractalManager != null)
+            {
+                colorButton.gameObject.SetActive(true);
+                colorButton.onClick.RemoveAllListeners();
+                colorButton.onClick.AddListener(() =>
+                {
+                    ColorPickerPopup.Create(OnColorChange, Main.Instance.FractalManager.CurrentColor);
+                });
+            }
+            else
+                colorButton.gameObject.SetActive(false);
         }
 
         void Update()
@@ -80,6 +68,10 @@ namespace Assets.Scripts
             string text = string.Format("{0:0.0} ms ({1:0.} fps)", msec, fps);
             if (fpsText != null)
                 fpsText.text = text;
+        }
+        void OnDestroy()
+        {
+            Main.Instance.OnFractalConstructed.RemoveListener(InitButtons);
         }
     }
 }

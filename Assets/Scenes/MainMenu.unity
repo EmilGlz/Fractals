@@ -252,6 +252,9 @@ MonoBehaviour:
   - {fileID: 11400000, guid: 53e43987b873a6f44bced1b965e8fff2, type: 2}
   - {fileID: 11400000, guid: 3bf099e519fcc3f45bdcdeb303d0a99f, type: 2}
   - {fileID: 11400000, guid: 9f47f381b4425cc41b5c9a61f0008462, type: 2}
+  OnFractalConstructed:
+    m_PersistentCalls:
+      m_Calls: []
 --- !u!4 &1562187870
 Transform:
   m_ObjectHideFlags: 0

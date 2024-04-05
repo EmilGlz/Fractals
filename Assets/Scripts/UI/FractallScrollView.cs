@@ -6,6 +6,7 @@ namespace Assets.Scripts.UI
     {
         [SerializeField] private Transform _content;
         private FractalsList _list;
+        protected override string BackgroundPath => "Sprites/space";
         public override void Enter()
         {
             base.Enter();

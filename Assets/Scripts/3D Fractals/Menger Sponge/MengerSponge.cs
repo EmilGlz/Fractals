@@ -10,28 +10,12 @@ namespace Assets.Scripts.D3.Menger
         [SerializeField] private SpongeProperties _properties;
 
 
-        private Color? _currentColor;
         public Color CurrentColor
         {
-            get
-            {
-                if (_currentColor.HasValue)
-                    return _currentColor.Value;
-                return _properties.Color;
-            }
-            set
-            {
-                _currentColor = value;
-                Instancer.Instance.Material.color = _currentColor.Value;
-            }
+            get => Instancer.Instance.Material.color;
+            set => Instancer.Instance.Material.color = value;
         }
-
-        protected override void Awake()
-        {
-            base.Awake();
-            if (this is IFractalManager i)
-                i.PromoteClass();
-        }
+        public bool CanChangeColor => true;
 
         void Start()
         {
@@ -45,14 +29,12 @@ namespace Assets.Scripts.D3.Menger
         private readonly int _currentIterator;
         private readonly SpongeProperties _properties;
         private readonly string _name;
-        private readonly float _scale;
         public Cube(Vector3[] vertices, int currentIterator, SpongeProperties properties, string name = "")
         {
             _vertices = vertices;
             _currentIterator = currentIterator;
             _properties = properties;
             _name = name;
-            _scale = Mathf.Pow(1 / 3f, currentIterator);
             if (currentIterator == 0)
             {
                 SpawnObject(_vertices[0], Vector3.one);
