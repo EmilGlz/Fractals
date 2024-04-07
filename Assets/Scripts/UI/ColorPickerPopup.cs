@@ -37,8 +37,7 @@ namespace Assets.Scripts.UI
             contentLg.childControlWidth = contentLg.childControlHeight = true;
             contentLg.childForceExpandHeight = contentLg.childForceExpandWidth = false;
             _colorPicker = content.GetComponentInChildren<ColorPicker>();
-            _colorPicker.OnColorChange.AddListener(OnChangeColor);
-            _colorPicker.UpdateImageColor(_startingColor);
+            _colorPicker.Initialize(_startingColor, OnChangeColor);
             Utils.RunAsync(() =>
             {
                 content.SetActive(true);

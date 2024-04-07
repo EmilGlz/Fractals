@@ -1,3 +1,5 @@
+using System;
+using TMPro;
 using UnityEngine;
 using UnityEngine.Events;
 using UnityEngine.EventSystems;
@@ -7,14 +9,45 @@ namespace Assets.Scripts.UI
 {
     public class ColorPicker : MonoBehaviour, IPointerClickHandler, IDragHandler, IPointerUpHandler, IBeginDragHandler
     {
-        [HideInInspector] public UnityEvent<Color> OnColorChange = new();
         [SerializeField] private Image _currentColorImage;
         [SerializeField] private RectTransform _cursor;
+        [SerializeField] private TMP_InputField _hexInput;
+        [SerializeField] private TMP_Text _validationErrorText;
+        private UnityEvent<Color> OnColorChange = new();
         private RectTransform rectTransform;
         void Start()
         {
             rectTransform = GetComponent<RectTransform>();
             _cursor.gameObject.SetActive(false);
+            _validationErrorText.gameObject.SetActive(false);
+        }
+
+        public void Initialize(Color startColor, UnityAction<Color> callBack)
+        {
+            _hexInput.text = Utils.ColorToHex(startColor)[1..];
+            UpdateImageColor(startColor);
+            OnColorChange.AddListener(callBack);
+        }
+
+        public void SetHexValue()
+        {
+            var hexInput = _hexInput.text;
+            if (!ValidationSuccessfull(hexInput))
+                return;
+            var color = Utils.ParseHexColor("#" + _hexInput.text);
+            SetColor(color);
+        }
+
+        private bool ValidationSuccessfull(string hexValue)
+        {
+            if (hexValue.Length != 6)
+            {
+                _validationErrorText.text = "Please provide 6 digit hex value";
+                _validationErrorText.gameObject.SetActive(true);
+                return false;
+            }
+            _validationErrorText.gameObject.SetActive(false);
+            return true;
         }
 
         public void UpdateImageColor(Color color)
@@ -22,7 +55,7 @@ namespace Assets.Scripts.UI
             _currentColorImage.color = color;
         }
 
-        Color Pick()
+        private Color Pick()
         {
             Texture2D colorChart = GetComponent<Image>().sprite.texture;
             Color pickedColor = colorChart.GetPixel(
@@ -47,6 +80,12 @@ namespace Assets.Scripts.UI
         private void SelectCurrentCursorPosition()
         {
             var output = Pick();
+            SetColor(output);
+        }
+
+        private void SetColor(Color output)
+        {
+            _hexInput.text = Utils.ColorToHex(output)[1..];
             UpdateImageColor(output);
             OnColorChange?.Invoke(output);
         }
@@ -64,7 +103,7 @@ namespace Assets.Scripts.UI
             float minY = -(rectTransform.GetHeight() / 2f - cursorWidth / 2f);
             float maxX = rectTransform.GetWidth() - cursorWidth / 2f;
             float maxY = -minY;
-            
+
             float clampedX = Mathf.Clamp(position.x, minX, maxX);
             float clampedY = Mathf.Clamp(position.y, minY, maxY);
 
