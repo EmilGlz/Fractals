@@ -1,6 +1,4 @@
 using Assets.Scripts.UI;
-using DG.Tweening;
-using Scripts;
 using TMPro;
 using UnityEngine;
 using UnityEngine.UI;
@@ -18,9 +16,9 @@ namespace Assets.Scripts
         }
         public override void Enter()
         {
+            _canCheckFPS = false;
             base.Enter();
             InitButtons();
-            _canCheckFPS = true;
         }
 
         private void OnColorChange(Color color)
@@ -37,6 +35,7 @@ namespace Assets.Scripts
         private void InitButtons()
         {
             fpsText = Utils.FindGameObject<TMP_Text>("FPSText", transform);
+            fpsText.gameObject.SetActive(_canCheckFPS);
             var backButton = Utils.FindGameObject<Button>("BackButton", transform);
             var colorButton = Utils.FindGameObject<Button>("ColorButton", transform);
             backButton.onClick.RemoveAllListeners();
