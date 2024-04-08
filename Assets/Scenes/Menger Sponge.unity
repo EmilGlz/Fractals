@@ -774,11 +774,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   Material: {fileID: 2100000, guid: ecbf414a4f4adaf45ae2a3bd935b9db2, type: 2}
-  _scalingDeltatime: 0
-  _scalingTime: 1
-  _startingAnimationScale: {x: 0, y: 0, z: 0}
-  _endingAnimationScale: {x: 0, y: 0, z: 0}
-  currentScale: {x: 0, y: 0, z: 0}
+  AnimationTime: 0
 --- !u!1 &1678917098
 GameObject:
   m_ObjectHideFlags: 0
