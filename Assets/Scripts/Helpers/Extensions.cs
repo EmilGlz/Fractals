@@ -95,4 +95,12 @@ public static class Extensions
         scale.z = matrix.GetColumn(2).magnitude;
         return scale;
     }
+
+    public static void ModifyScale(ref this Matrix4x4 matrix, Vector3 newScale)
+    {
+        // Set the scale components of the matrix to the new scale values
+        matrix.m00 = newScale.x; // Set x component of the X axis
+        matrix.m11 = newScale.y; // Set y component of the Y axis
+        matrix.m22 = newScale.z; // Set z component of the Z axis
+    }
 }

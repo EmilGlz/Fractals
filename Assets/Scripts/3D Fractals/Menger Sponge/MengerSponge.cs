@@ -1,3 +1,4 @@
+using Assets.Scripts.Instancing;
 using Scripts;
 using System.Collections;
 using System.Collections.Generic;
@@ -12,14 +13,14 @@ namespace Assets.Scripts.D3.Menger
 
         public Color CurrentColor
         {
-            get => Instancer.Instance.Material.color;
-            set => Instancer.Instance.Material.color = value;
+            get => MengerSpongeInstancer.Instance.Material.color;
+            set => MengerSpongeInstancer.Instance.Material.color = value;
         }
         public bool CanChangeColor => true;
 
         void Start()
         {
-            Instancer.Instance.AnimationTime = _properties.Delay * 0.8f;
+            MengerSpongeInstancer.Instance.AnimationTime = _properties.Delay * 0.8f;
             new Cube(Utils.GetPositions(_vertices), 0, _properties);
         }
     }
@@ -49,20 +50,20 @@ namespace Assets.Scripts.D3.Menger
         {
             yield return new WaitForSeconds(_properties.Delay);
             var children = GenerateInsideCubes();
-            Instancer.Instance.SaveBatches();
-            Instancer.Instance.ClearBatches();
+            MengerSpongeInstancer.Instance.SaveBatches();
+            MengerSpongeInstancer.Instance.ClearBatches();
             yield return null;
             foreach (var child in children)
             {
                 SpawnObject(child._vertices[0]);
             }
-            Instancer.Instance.StartScaleAnimation();
+            MengerSpongeInstancer.Instance.StartScaleAnimation();
         }
 
         private void SpawnObject(Vector3 pivotPos, Vector3? scale = null)
         {
             var targetScale = scale ?? Mathf.Pow(1 / 3f, _currentIterator + 1) * Vector3.one;
-            Instancer.Instance.SpawnMesh(pivotPos + targetScale * 0.5f, Quaternion.identity, targetScale);
+            MengerSpongeInstancer.Instance.SpawnMesh(pivotPos + targetScale * 0.5f, Quaternion.identity, targetScale);
         }
 
         public List<Cube> GenerateInsideCubes()
