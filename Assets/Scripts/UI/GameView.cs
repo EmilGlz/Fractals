@@ -16,14 +16,9 @@ namespace Assets.Scripts
         }
         public override void Enter()
         {
-            _canCheckFPS = false;
             base.Enter();
             InitButtons();
-        }
-
-        private void OnColorChange(Color color)
-        {
-            Main.Instance.FractalManager.CurrentColor = color;
+            CanShowFps = _canCheckFPS;
         }
 
         public override void Exit()
@@ -34,8 +29,6 @@ namespace Assets.Scripts
 
         private void InitButtons()
         {
-            fpsText = Utils.FindGameObject<TMP_Text>("FPSText", transform);
-            fpsText.gameObject.SetActive(_canCheckFPS);
             var backButton = Utils.FindGameObject<Button>("BackButton", transform);
             var colorButton = Utils.FindGameObject<Button>("ColorButton", transform);
             backButton.onClick.RemoveAllListeners();
@@ -48,13 +41,21 @@ namespace Assets.Scripts
             {
                 colorButton.gameObject.SetActive(true);
                 colorButton.onClick.RemoveAllListeners();
-                colorButton.onClick.AddListener(() =>
-                {
-                    ColorPickerPopup.Create(OnColorChange, Main.Instance.FractalManager.CurrentColor);
-                });
+                colorButton.onClick.AddListener(() => PropertiesPopup.Create());
             }
             else
                 colorButton.gameObject.SetActive(false);
+        }
+
+        public bool CanShowFps
+        {
+            get => _canCheckFPS;
+            set
+            {
+                _canCheckFPS = value;
+                fpsText = Utils.FindGameObject<TMP_Text>("FPSText", transform);
+                fpsText.gameObject.SetActive(_canCheckFPS);
+            }
         }
 
         void Update()

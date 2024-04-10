@@ -75,6 +75,12 @@ namespace Assets.Scripts
                 item.gameObject.SetActive(true);
         }
 
+        public T GetView<T>() where T : View
+        { 
+            var res = _views.FirstOrDefault(v => v is T a);
+            return res != null ? res as T : null;
+        }
+
         private void AdjustPerformance()
         {
             Application.targetFrameRate = Device.TargetFrameRate; // Use device defaults

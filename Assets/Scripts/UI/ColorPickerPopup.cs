@@ -17,7 +17,7 @@ namespace Assets.Scripts.UI
             popup.Show();
         }
 
-        public ColorPickerPopup(Action<Color> onChangeColor, Color startingColor, Func<PopupAlignment> getAlignment = null, Transform parent = null) : base(()=> PopupAlignment.Top, parent)
+        public ColorPickerPopup(Action<Color> onChangeColor, Color startingColor, Func<PopupAlignment> getAlignment = null, Transform parent = null) : base(()=> PopupAlignment.Top, parent, onBack: PropertiesPopup.Create)
         {
             _onChangeColor = onChangeColor;
             _startingColor = startingColor;

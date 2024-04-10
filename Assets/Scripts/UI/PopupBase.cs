@@ -10,6 +10,7 @@ namespace Assets.Scripts.UI
     {
         private const string _defaultPrefabName = "Prefabs/PopupTemplate";
         protected RectTransform PopupRect;
+        public GameObject Instance => PopupRect.gameObject;
         protected Vector2 AnimationStartPos;
         protected Vector2 AnimationEndPos;
         protected readonly FreeModifier CornerModifier;
@@ -18,9 +19,37 @@ namespace Assets.Scripts.UI
         protected virtual Color? BackgroundColor => new Color(1, 1, 1, 0);
         protected PopupAlignment Alignment { get; private set; }
         protected VerticalLayoutGroup PopupVerticalLayoutGroup { get; }
+        protected virtual void InitToolbar()
+        {
+            var topTb = Utils.FindGameObject("TopToolbar", PopupRect.gameObject).GetComponent<RectTransform>();
+            topTb.SetHeight(44);
+            var backButton = Utils.FindGameObject<Button>("LeftButton", PopupRect);
+            var closeButton = Utils.FindGameObject<Button>("RightButton", PopupRect);
+            backButton.gameObject.SetActive(_onBack != null);
+            closeButton.gameObject.SetActive(_onClose != null);
 
+            if (_onBack != null)
+            {
+                backButton.onClick.RemoveAllListeners();
+                backButton.onClick.AddListener(() =>
+                {
+                    _onBack.Invoke();
+                });
+            }
+            if (_onClose != null)
+            {
+                closeButton.onClick.RemoveAllListeners();
+                closeButton.onClick.AddListener(() =>
+                {
+                    _onClose.Invoke();
+                });
+            }
+        }
         private Background _background;
         protected Func<PopupAlignment> _getAlignment;
+        private readonly Action _onBack;
+        private readonly Action _onClose;
+
         protected bool IsClosing { get; private set; }
         protected virtual RectOffset PopupPadding => Alignment switch
         {
@@ -28,16 +57,22 @@ namespace Assets.Scripts.UI
             PopupAlignment.Top => new RectOffset(0, 0, 24 + Device.TopOffset, 24),
             _ => new RectOffset()
         };
-        protected PopupBase(Func<PopupAlignment> getAlignment = null, Transform parent = null)
+        protected PopupBase(Func<PopupAlignment> getAlignment = null, Transform parent = null, Action onBack = null, Action onClose = null)
         {
             _background = new Background(Dispose);
             _getAlignment = getAlignment ?? (() => PopupAlignment.Bottom);
+            _onBack = onBack;
+            _onClose = onClose;
             PopupRect = ResourceHelper.LoadPrefab(_defaultPrefabName, parent != null ? parent : Main.Instance.PopupLayer).GetComponent<RectTransform>();
             PopupRect.name = GetType().Name;
             PopupRect.transform.SetAsLastSibling();
             CornerModifier = PopupRect.GetComponent<FreeModifier>();
             PopupVerticalLayoutGroup = PopupRect.gameObject.GetComponent<VerticalLayoutGroup>();
             Alignment = _getAlignment();
+            PopupsManager.instance.DestroyLast();
+            PopupsManager.instance.AddPopup(this);
+            if(TouchRotation.Instance != null)
+                TouchRotation.Instance.CanTouchRotate = false;
         }
         protected virtual void UpdateSizes()
         {
@@ -87,6 +122,7 @@ namespace Assets.Scripts.UI
             PopupRect.SetLeft(0);
             PopupRect.SetRight(0);
             UpdateSizes();
+            InitToolbar();
             Utils.RunAsync(() =>
             {
                 StartOpenAnimation();
@@ -140,12 +176,20 @@ namespace Assets.Scripts.UI
         }
         public virtual void DestroyPopup()
         {
-
+            if (_background != null)
+            {
+                _background.Dispose();
+                _background = null;
+            }
             if (PopupRect != null)
             {
+                PopupsManager.instance.RemovePopup(this);
                 UnityEngine.Object.Destroy(PopupRect.gameObject);
                 PopupRect = null;
             }
+
+            if (TouchRotation.Instance != null)
+                TouchRotation.Instance.CanTouchRotate = true;
         }
         public virtual void Dispose()
         {
