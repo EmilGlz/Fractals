@@ -19,32 +19,6 @@ namespace Assets.Scripts.UI
         protected virtual Color? BackgroundColor => new Color(1, 1, 1, 0);
         protected PopupAlignment Alignment { get; private set; }
         protected VerticalLayoutGroup PopupVerticalLayoutGroup { get; }
-        protected virtual void InitToolbar()
-        {
-            var topTb = Utils.FindGameObject("TopToolbar", PopupRect.gameObject).GetComponent<RectTransform>();
-            topTb.SetHeight(44);
-            var backButton = Utils.FindGameObject<Button>("LeftButton", PopupRect);
-            var closeButton = Utils.FindGameObject<Button>("RightButton", PopupRect);
-            backButton.gameObject.SetActive(_onBack != null);
-            closeButton.gameObject.SetActive(_onClose != null);
-
-            if (_onBack != null)
-            {
-                backButton.onClick.RemoveAllListeners();
-                backButton.onClick.AddListener(() =>
-                {
-                    _onBack.Invoke();
-                });
-            }
-            if (_onClose != null)
-            {
-                closeButton.onClick.RemoveAllListeners();
-                closeButton.onClick.AddListener(() =>
-                {
-                    _onClose.Invoke();
-                });
-            }
-        }
         private Background _background;
         protected Func<PopupAlignment> _getAlignment;
         private readonly Action _onBack;
@@ -73,6 +47,35 @@ namespace Assets.Scripts.UI
             PopupsManager.instance.AddPopup(this);
             if(TouchRotation.Instance != null)
                 TouchRotation.Instance.CanTouchRotate = false;
+        }
+        protected virtual void InitToolbar()
+        {
+            var topTb = Utils.FindGameObject("TopToolbar", PopupRect.gameObject).GetComponent<RectTransform>();
+            topTb.SetHeight(36);
+            var backButton = Utils.FindGameObject<Button>("LeftButton", PopupRect);
+            var closeButton = Utils.FindGameObject<Button>("RightButton", PopupRect);
+            backButton.gameObject.SetActive(_onBack != null);
+            closeButton.gameObject.SetActive(_onClose != null);
+
+            if (_onBack != null)
+            {
+                backButton.onClick.RemoveAllListeners();
+                backButton.onClick.AddListener(() =>
+                {
+                    _onBack.Invoke();
+                });
+            }
+            if (_onClose != null)
+            {
+                closeButton.onClick.RemoveAllListeners();
+                closeButton.onClick.AddListener(() =>
+                {
+                    _onClose.Invoke();
+                });
+            }
+
+            if(_onClose == null && _onBack == null)
+                topTb.SetHeight(0);
         }
         protected virtual void UpdateSizes()
         {
