@@ -1,3 +1,4 @@
+using Assets.Scripts.Instancing;
 using Scripts;
 using System.Collections;
 using System.Collections.Generic;
@@ -11,13 +12,14 @@ namespace Assets.Scripts.D3.OctahedronSpheres
         [SerializeField] SpheresOctahedronProperties _properties;
         public Color CurrentColor
         {
-            get => Instancer.Instance.Material.color;
-            set => Instancer.Instance.Material.color = value;
+            get => OctahedronFromSpheresInstancer.Instance.Material.color;
+            set => OctahedronFromSpheresInstancer.Instance.Material.color = value;
         }
         public bool CanChangeColor => true;
 
         void Start()
         {
+            OctahedronFromSpheresInstancer.Instance.AnimationTime = _properties.Delay * 0.8f;
             new Sphere(Vector3.zero, _properties, 0);
         }
     }
@@ -53,7 +55,7 @@ namespace Assets.Scripts.D3.OctahedronSpheres
 
         private void SpawnObject(Vector3 center, float diameter)
         {
-            Instancer.Instance.SpawnMesh(center, Quaternion.identity, Vector3.one * diameter);
+            OctahedronFromSpheresInstancer.Instance.SpawnMeshAnim(center, Quaternion.identity, Vector3.zero, Vector3.one * diameter);
         }
 
         private List<Sphere> GetChildSpheres()
