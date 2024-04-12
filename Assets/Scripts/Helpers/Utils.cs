@@ -2,6 +2,7 @@ using Assets.Scripts;
 using System;
 using System.Collections;
 using System.Globalization;
+using Unity.Collections;
 using UnityEngine;
 using UnityEngine.UI;
 
@@ -218,5 +219,17 @@ public static class Utils
     {
         Color32 color32 = color;
         return $"#{color32.r:X2}{color32.g:X2}{color32.b:X2}";
+    }
+
+    public static NativeArray<Matrix4x4> GetEmpty1000Matrices()
+    {
+        return new NativeArray<Matrix4x4>(1000, Allocator.Persistent);
+    }
+
+    public static NativeArray<NativeArray<Matrix4x4>> GetEmpty1000Batches()
+    {
+        var arr = new NativeArray<NativeArray<Matrix4x4>>(1, Allocator.Persistent);
+        arr[0] = GetEmpty1000Matrices();
+        return arr;
     }
 }

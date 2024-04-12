@@ -1,4 +1,5 @@
 using Assets.Scripts.Instancing;
+using JetBrains.Annotations;
 using Scripts;
 using System.Collections;
 using System.Collections.Generic;
@@ -20,7 +21,7 @@ namespace Assets.Scripts.D3.Menger
 
         void Start()
         {
-            MengerSpongeInstancer.Instance.AnimationTime = _properties.Delay * 0.8f;
+            //MengerSpongeInstancer.Instance.AnimationTime = _properties.Delay * 0.8f;
             new Cube(Utils.GetPositions(_vertices), 0, _properties);
         }
     }
@@ -47,14 +48,13 @@ namespace Assets.Scripts.D3.Menger
         {
             yield return new WaitForSeconds(_properties.Delay);
             var children = GenerateInsideCubes();
-            MengerSpongeInstancer.Instance.SaveBatches();
-            MengerSpongeInstancer.Instance.ClearBatches();
-            yield return null;
+            //yield return null;
+            int allMeshesCount = (int)Mathf.Pow(20f, _currentIterator + 1); 
+            MengerSpongeInstancer.Instance.RemoveAll(20, allMeshesCount);
             foreach (var child in children)
             {
                 SpawnObject(child._vertices[0]);
             }
-            MengerSpongeInstancer.Instance.StartScaleAnimation();
         }
 
         private void SpawnObject(Vector3 pivotPos, Vector3? scale = null)
@@ -371,7 +371,5 @@ namespace Assets.Scripts.D3.Menger
             Vector3 positionC = A + vectorABD * 2;
             return positionC;
         }
-
-        private bool CanHaveAnimation(string name) => name == "A";
     }
 }

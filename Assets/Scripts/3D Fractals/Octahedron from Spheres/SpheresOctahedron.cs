@@ -19,7 +19,7 @@ namespace Assets.Scripts.D3.OctahedronSpheres
 
         void Start()
         {
-            OctahedronFromSpheresInstancer.Instance.AnimationTime = _properties.Delay * 0.8f;
+            //OctahedronFromSpheresInstancer.Instance.AnimationTime = _properties.Delay * 0.8f;
             new Sphere(Vector3.zero, _properties, 0);
         }
     }
@@ -55,7 +55,7 @@ namespace Assets.Scripts.D3.OctahedronSpheres
 
         private void SpawnObject(Vector3 center, float diameter)
         {
-            OctahedronFromSpheresInstancer.Instance.SpawnMeshAnim(center, Quaternion.identity, Vector3.zero, Vector3.one * diameter);
+            //OctahedronFromSpheresInstancer.Instance.SpawnMeshAnim(center, Quaternion.identity, Vector3.zero, Vector3.one * diameter);
         }
 
         private List<Sphere> GetChildSpheres()

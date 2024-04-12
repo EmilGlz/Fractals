@@ -262,7 +262,6 @@ MonoBehaviour:
   _properties:
     IteratorLimit: 4
     Delay: 2
-    Color: {r: 0, g: 0, b: 0, a: 0}
 --- !u!1 &486930244
 GameObject:
   m_ObjectHideFlags: 0
@@ -774,7 +773,6 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Mesh: {fileID: 10202, guid: 0000000000000000e000000000000000, type: 0}
   Material: {fileID: 2100000, guid: ecbf414a4f4adaf45ae2a3bd935b9db2, type: 2}
-  AnimationTime: 1
 --- !u!1 &1678917098
 GameObject:
   m_ObjectHideFlags: 0

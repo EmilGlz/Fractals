@@ -1,10 +1,12 @@
+using Unity.Collections;
+using Unity.Mathematics;
 using UnityEngine;
 
 public static class Extensions
 {
     public static Vector2 GetPosition(this Transform transform)
     {
-        return new Vector2(transform.position.x, transform.position.y); 
+        return new Vector2(transform.position.x, transform.position.y);
     }
 
     public static float GetPosX(this RectTransform rect)
@@ -102,5 +104,39 @@ public static class Extensions
         matrix.m00 = newScale.x; // Set x component of the X axis
         matrix.m11 = newScale.y; // Set y component of the Y axis
         matrix.m22 = newScale.z; // Set z component of the Z axis
+    }
+
+    public static int GetMatricesCountFrom1000(this NativeArray<Matrix4x4> matrices)
+    {
+        for (int i = 0; i < 1000; i++)
+        {
+            if (matrices[i].GetScale() == Vector3.zero)
+                return i;
+        }
+        return -1;
+    }
+
+    public static void Insert<T>(this ref NativeArray<T> matrices, T matrice) where T : struct
+    {
+        NativeArray<T> newArray = new(matrices.Length + 1, Allocator.TempJob);
+        for (int i = 0; i < matrices.Length; i++)
+            newArray[i] = matrices[i];
+        newArray[^1] = matrice;
+        matrices.Dispose();
+        matrices = newArray;
+    }
+
+    public static void ChangeFirstElementThatIsZero(this ref NativeArray<float3> array, float3 element)
+    {
+        if(array.Length == 0 || !array.IsCreated)
+            array = new NativeArray<float3>(1, Allocator.Persistent);
+        for (int i = 0; i < array.Length; i++)
+        {
+            if (math.all(array[i] == float3.zero))
+            { 
+                array[i] = element;
+                return;
+            }
+        }
     }
 }
