@@ -30,13 +30,11 @@ namespace Assets.Scripts.D3.Menger
         private readonly Vector3[] _vertices;
         private readonly int _currentIterator;
         private readonly SpongeProperties _properties;
-        private readonly string _name;
-        public Cube(Vector3[] vertices, int currentIterator, SpongeProperties properties, string name = "")
+        public Cube(Vector3[] vertices, int currentIterator, SpongeProperties properties)
         {
             _vertices = vertices;
             _currentIterator = currentIterator;
             _properties = properties;
-            _name = name;
             if (currentIterator == 0)
             {
                 SpawnObject(_vertices[0], Vector3.one);
@@ -44,7 +42,6 @@ namespace Assets.Scripts.D3.Menger
             if (currentIterator < properties.IteratorLimit)
                 MengerSponge.Instance.StartCoroutine(GenerateChildren());
         }
-
 
         IEnumerator GenerateChildren()
         {
@@ -167,7 +164,7 @@ namespace Assets.Scripts.D3.Menger
                     vertices["ABE"],
                     vertices["ABDE"],
                     vertices["ADE"],
-                }, nextIterator, _properties, "A"),
+                }, nextIterator, _properties),
                 new(new Vector3[]{
                     vertices["AB"],
                     vertices["BA"],
@@ -177,7 +174,7 @@ namespace Assets.Scripts.D3.Menger
                     vertices["BAF"],
                     vertices["BACF"],
                     vertices["ABDE"],
-                }, nextIterator, _properties, "AB"),
+                }, nextIterator, _properties),
                 new(new Vector3[]{
                     vertices["BA"],
                     vertices["B"],
@@ -187,7 +184,7 @@ namespace Assets.Scripts.D3.Menger
                     vertices["BF"],
                     vertices["BCF"],
                     vertices["BACF"],
-                }, nextIterator, _properties, "BA"),
+                }, nextIterator, _properties),
                 new(new Vector3[]{
                     vertices["BAC"],
                     vertices["BC"],
@@ -197,7 +194,7 @@ namespace Assets.Scripts.D3.Menger
                     vertices["BCF"],
                     vertices["CBG"],
                     vertices["CBDG"],
-                }, nextIterator, _properties, "BAC"),
+                }, nextIterator, _properties),
                 new(new Vector3[]{
                     vertices["CBD"],
                     vertices["CB"],
@@ -207,7 +204,7 @@ namespace Assets.Scripts.D3.Menger
                     vertices["CBG"],
                     vertices["CG"],
                     vertices["CDG"],
-                }, nextIterator, _properties, "CBD"),
+                }, nextIterator, _properties),
                 new(new Vector3[]{
                     vertices["DAC"],
                     vertices["CBD"],
@@ -217,7 +214,7 @@ namespace Assets.Scripts.D3.Menger
                     vertices["CBDG"],
                     vertices["CDG"],
                     vertices["DCH"],
-                }, nextIterator, _properties, "DAC"),
+                }, nextIterator, _properties),
                 new(new Vector3[]{
                     vertices["DA"],
                     vertices["DAC"],
@@ -227,7 +224,7 @@ namespace Assets.Scripts.D3.Menger
                     vertices["DACH"],
                     vertices["DCH"],
                     vertices["DH"],
-                }, nextIterator, _properties, "DA"),
+                }, nextIterator, _properties),
                 new(new Vector3[]{
                     vertices["AD"],
                     vertices["ABD"],
@@ -237,7 +234,7 @@ namespace Assets.Scripts.D3.Menger
                     vertices["ABDE"],
                     vertices["DACH"],
                     vertices["DAH"],
-                }, nextIterator, _properties, "DA"),
+                }, nextIterator, _properties),
 
                 // 2ND FLOOR
                 new(new Vector3[]{
@@ -249,7 +246,7 @@ namespace Assets.Scripts.D3.Menger
                     vertices["EAF"],
                     vertices["EAFH"],
                     vertices["EAH"],
-                }, nextIterator, _properties, "AE"),
+                }, nextIterator, _properties),
                 new(new Vector3[]{
                     vertices["BAF"],
                     vertices["BF"],
@@ -259,7 +256,7 @@ namespace Assets.Scripts.D3.Menger
                     vertices["FB"],
                     vertices["FBG"],
                     vertices["FBEG"],
-                }, nextIterator, _properties, "BAF"),
+                }, nextIterator, _properties),
                 new(new Vector3[]{
                     vertices["CBDG"],
                     vertices["CBG"],
@@ -269,7 +266,7 @@ namespace Assets.Scripts.D3.Menger
                     vertices["GCF"],
                     vertices["GC"],
                     vertices["GCH"],
-                }, nextIterator, _properties, "CG"),
+                }, nextIterator, _properties),
                 new(new Vector3[]{
                     vertices["DAH"],
                     vertices["DACH"],
@@ -279,7 +276,7 @@ namespace Assets.Scripts.D3.Menger
                     vertices["HDEG"],
                     vertices["HDG"],
                     vertices["HD"],
-                }, nextIterator, _properties, "DAH"),
+                }, nextIterator, _properties),
 
                 // 3RD FLOOR
                 new(new Vector3[]{
@@ -291,7 +288,7 @@ namespace Assets.Scripts.D3.Menger
                     vertices["EF"],
                     vertices["EFH"],
                     vertices["EH"],
-                }, nextIterator, _properties, "EA"),
+                }, nextIterator, _properties),
                 new(new Vector3[]{
                     vertices["EAF"],
                     vertices["FBE"],
@@ -301,7 +298,7 @@ namespace Assets.Scripts.D3.Menger
                     vertices["FE"],
                     vertices["FEG"],
                     vertices["EFH"],
-                }, nextIterator, _properties, "EAF"),
+                }, nextIterator, _properties),
                 new(new Vector3[]{
                     vertices["FBE"],
                     vertices["FB"],
@@ -311,7 +308,7 @@ namespace Assets.Scripts.D3.Menger
                     vertices["F"],
                     vertices["FG"],
                     vertices["FEG"],
-                }, nextIterator, _properties, "FBE"),
+                }, nextIterator, _properties),
                 new(new Vector3[]{
                     vertices["FBEG"],
                     vertices["FBG"],
@@ -321,7 +318,7 @@ namespace Assets.Scripts.D3.Menger
                     vertices["FG"],
                     vertices["GF"],
                     vertices["GFH"],
-                }, nextIterator, _properties, "FBEG"),
+                }, nextIterator, _properties),
                 new(new Vector3[]{
                     vertices["GCFH"],
                     vertices["GCF"],
@@ -331,7 +328,7 @@ namespace Assets.Scripts.D3.Menger
                     vertices["GF"],
                     vertices["G"],
                     vertices["GH"],
-                }, nextIterator, _properties, "GCFH"),
+                }, nextIterator, _properties),
                 new(new Vector3[]{
                     vertices["HDEG"],
                     vertices["GCFH"],
@@ -341,7 +338,7 @@ namespace Assets.Scripts.D3.Menger
                     vertices["GFH"],
                     vertices["GH"],
                     vertices["HG"],
-                }, nextIterator, _properties, "HDEG"),
+                }, nextIterator, _properties),
                 new(new Vector3[]{
                     vertices["HDE"],
                     vertices["HDEG"],
@@ -351,7 +348,7 @@ namespace Assets.Scripts.D3.Menger
                     vertices["HEG"],
                     vertices["HG"],
                     vertices["H"],
-                }, nextIterator, _properties, "HDE"),
+                }, nextIterator, _properties),
                 new(new Vector3[]{
                     vertices["EAH"],
                     vertices["EAFH"],
@@ -361,7 +358,7 @@ namespace Assets.Scripts.D3.Menger
                     vertices["EFH"],
                     vertices["HEG"],
                     vertices["HE"],
-                }, nextIterator, _properties, "EAH"),
+                }, nextIterator, _properties),
 
             };
             return newCubes;

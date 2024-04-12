@@ -1,4 +1,9 @@
 using System.Collections.Generic;
+using System.Linq;
+using Unity.Burst;
+using Unity.Collections;
+using Unity.Jobs;
+using Unity.Mathematics;
 using UnityEngine;
 
 namespace Assets.Scripts.Instancing
@@ -17,11 +22,26 @@ namespace Assets.Scripts.Instancing
         private float _scalingDeltatime;
         private bool _canScale = false;
         private Vector3 currentScale;
-        
+
+        private MeshPositionJob _job;
+        private NativeArray<float3> _nativePositions;
+        private NativeArray<float> _nativeScales;
+        private NativeArray<NativeArray<Matrix4x4>> _nativeBatches;
+
+        private void Start()
+        {
+            _job = new MeshPositionJob()
+            { };
+        }
+
         private void RenderBatches()
         {
-            foreach (var batch in Batches)
-                Graphics.DrawMeshInstanced(Mesh, 0, Material, batch);
+            _job.Batches = _nativeBatches;
+            var jobHandle = _job.Schedule(_nativeBatches.Length, 64);
+            jobHandle.Complete();
+
+            foreach (var batch in _nativeBatches)
+                Graphics.DrawMeshInstanced(Mesh, 0, Material, batch.ToArray());
 
             if (_canScale)
             {
@@ -140,6 +160,32 @@ namespace Assets.Scripts.Instancing
 
         protected virtual void UpdateAnimationParameters(Vector3 parentScale)
         {
+        }
+    }
+
+    [BurstCompile]
+    internal struct MeshPositionJob : IJobParallelFor
+    {
+        public NativeArray<NativeArray<Matrix4x4>> Batches;
+        public NativeArray<float3> Positions;
+        public NativeArray<float3> Scales;
+
+        public readonly void Execute(int index)
+        {
+            //var elementsCountInLastBatch = Batches.Length > 0 ? Batches[^1].Length : 1000; // if there is no batches yet, create new one
+            //if (elementsCountInLastBatch < 1000)
+            //{
+            //    // Can add to the last batch, limit(1000) is not reached yet
+            //    Batches[^1].Add(matrix);
+            //}
+            //else
+            //{
+            //    // There are 1000 elements in last batch, which is maximum. We need to create new one with the matrix inside of it
+            //    Batches.Add(new List<Matrix4x4>()
+            //    {
+            //        matrix
+            //    });
+            //}
         }
     }
 }
