@@ -9,6 +9,9 @@ public class TouchRotation : Singleton<TouchRotation>
     private float _noTouchTimer;
     private bool _isSelfRotating;
 
+    private float _yaw;
+    private float _pitch;
+
     private bool _canTouchRotate;
     public bool CanTouchRotate
     {
@@ -23,6 +26,15 @@ public class TouchRotation : Singleton<TouchRotation>
     {
         _noTouchTimer = 0f;
         CanTouchRotate = true;
+
+        // Initialize from current rotation
+        Vector3 angles = transform.eulerAngles;
+        _yaw = angles.y;
+        _pitch = angles.x;
+
+        // Normalize to [-180, 180] so clamping works correctly
+        if (_pitch > 180f) _pitch -= 360f;
+        if (_yaw > 180f) _yaw -= 360f;
     }
     void Update()
     {
@@ -38,19 +50,15 @@ public class TouchRotation : Singleton<TouchRotation>
                 _noTouchTimer = 0;
                 Vector3 deltaMousePosition = Input.mousePosition - lastMousePosition;
 
-                // Rotate horizontally (around Y axis)
-                float horizontalRotation = deltaMousePosition.x * rotateSpeed;
-                transform.Rotate(Vector3.up, horizontalRotation, Space.World);
+                _yaw += deltaMousePosition.x * rotateSpeed;
+                _pitch -= deltaMousePosition.y * rotateSpeed;
+                _pitch = Mathf.Clamp(_pitch, -89f, 89f);
 
-                // Rotate vertically (around X axis)
-                float verticalRotation = deltaMousePosition.y * rotateSpeed;
-                transform.Rotate(Vector3.right, -verticalRotation, Space.World);
-
-                transform.rotation = Quaternion.Euler(transform.rotation.eulerAngles.x, transform.rotation.eulerAngles.y, 0f);
+                transform.rotation = Quaternion.Euler(_pitch, _yaw, 0f);
 
                 lastMousePosition = Input.mousePosition;
             }
-            else if (Input.touchCount == 0 && !_isSelfRotating)
+            else if (!Input.GetMouseButton(0) && !_isSelfRotating)
             {
                 _noTouchTimer += Time.deltaTime;
                 if (_noTouchTimer >= _selfRotateAfterSeconds)
@@ -58,6 +66,9 @@ public class TouchRotation : Singleton<TouchRotation>
             }
         }
         if (_isSelfRotating)
-            transform.Rotate(Vector3.up, -_selfRotationSpeed * Time.deltaTime, Space.World);
+        {
+            _yaw -= _selfRotationSpeed * Time.deltaTime;
+            transform.rotation = Quaternion.Euler(_pitch, _yaw, 0f);
+        }
     }
 }
