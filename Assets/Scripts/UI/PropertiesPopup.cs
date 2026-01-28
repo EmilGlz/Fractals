@@ -25,7 +25,7 @@ namespace Assets.Scripts.UI
             contentRect.anchoredPosition = Vector2.zero;
             var contentLg = content.GetComponent<VerticalLayoutGroup>();
             contentLg.padding = new RectOffset(0, 0, 0, 0);
-            contentLg.spacing = 30;
+            contentLg.spacing = 6;
             contentLg.childAlignment = TextAnchor.MiddleCenter;
             contentLg.childControlWidth = contentLg.childControlHeight = false;
             contentLg.childForceExpandHeight = contentLg.childForceExpandWidth = false;
